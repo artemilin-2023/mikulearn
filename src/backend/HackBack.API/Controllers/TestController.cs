@@ -8,6 +8,7 @@ using ResultSharp.HttpResult;
 namespace HackBack.API.Controllers
 {
     [ApiController]
+    // TODO: create for get?
     [PermissionRequired([Permission.Create])]
     [Route("api/test")]
     public class TestController(ITestService testService) : ControllerBase
