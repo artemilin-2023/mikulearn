@@ -13,9 +13,9 @@ The project can be run in `docker` using `docker compose`
 ## Project architecture
 
 A main [Caddy](https://caddyserver.com) acts as a tls-terminating reverse proxy for the frontend and the backend
-The frontend is a static single-page app built using [React](https://react.dev) and [Vite](https://vite.dev). You can find more in [[src/frontend/README.md]]. Static files are server using [Nginx](https://nginx.org)
-The backend is a C# [ASP.NET](https://learn.microsoft.com/ru-ru/aspnet/core) application which uses [PostgreSQL
-](https://www.postgresql.org) as a main database, [Redis](https://redis.io) as a cache and session storage and [MinIO](https://min.io) to store user uploaded files.
+The frontend is a static single-page app built using [React](https://react.dev) and [Vite](https://vite.dev). You can find more in [src/frontend/README.md](src/frontend/README.md). Static files are server using [Nginx](https://nginx.org)
+
+The backend is a C# [ASP.NET](https://learn.microsoft.com/ru-ru/aspnet/core) application which uses [PostgreSQL](https://www.postgresql.org) as a main database, [Redis](https://redis.io) as a cache and session storage and [MinIO](https://min.io) to store user uploaded files.
 
 ## Configuration
 
@@ -32,6 +32,7 @@ The backend is a C# [ASP.NET](https://learn.microsoft.com/ru-ru/aspnet/core) app
 ## Development
 
 There is a `docker-compose-dev.yaml` made as an override specifically for development purposes. It allows hot-reload of frontend code as well as adds management utilities like `rabbitmq-management` and `pgadmin`. You can use it with the following command:
+
 `docker compose -f docker-compose.yaml -f docker-compose-dev.yaml down --remove-orphans && docker compose -f docker-compose.yaml -f docker-compose-dev.yaml up -d --build`
 
 ## Credits
