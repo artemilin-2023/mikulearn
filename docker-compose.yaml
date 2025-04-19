@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   backend:
-    build: 
-      context: src/backend 
+    build:
+      context: src/backend
       dockerfile: Dockerfile
     ports:
       - 8080:8080
@@ -54,27 +54,12 @@ services:
       timeout: 5s
       retries: 5
 
-  frontend-build:
+  frontend:
     build:
       context: ./src/frontend/
-      dockerfile: Dockerfile
+      dockerfile: build/Dockerfile
     volumes:
-      - frontend-build:/app/dist
-
-  nginx:
-    image: nginx:alpine
-    depends_on:
-      frontend-build:
-        condition: service_completed_successfully
-      backend:
-        condition: service_started
-    ports:
-      - 3000:80
-    volumes:
-      - frontend-build:/usr/share/nginx/html
       - ./configurations/nginx.conf:/etc/nginx/nginx.conf:ro
-
-
 
 volumes:
   postgres-data:
