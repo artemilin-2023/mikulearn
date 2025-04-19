@@ -10,7 +10,9 @@ The project can be run in `docker` using `docker compose`
 
     ```bash
     docker compose up -d --build
-    ``` to run the project on `localhost`
+    ```
+
+    to run the project on `localhost`
 
     ```bash
     docker compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d --build
