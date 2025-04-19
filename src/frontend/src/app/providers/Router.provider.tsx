@@ -6,6 +6,7 @@ import { Page } from 'shared/layouts/Page';
 import { IndexPage } from 'pages/Index/IndexPage';
 import { FallbackPage } from 'pages/Fallback/FallbackPage';
 import { NotFoundPage } from 'pages/NotFound/NotFoundPage';
+import { DashboardPage } from 'pages/Dashboard/DashboardPage'
 
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { Power3, Power4, gsap } from "gsap";
@@ -152,6 +153,7 @@ const AnimatedRoutes = () => {
         <div ref={nodeRef} className="page-transition-container">
           <Routes location={location}>
             <Route path="/" element={<IndexPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>

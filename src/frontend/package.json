@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^7.17.4",
+    "@mantine/hooks": "^7.17.4",
     "@types/node": "^22.13.10",
     "gsap": "^3.12.7",
     "react": "^19.0.0",
