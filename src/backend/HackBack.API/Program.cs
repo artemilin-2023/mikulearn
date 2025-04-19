@@ -8,12 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+
 await services
     .AddApi(configuration)
     .AddApplication(configuration)
     .AddInfrastructureAsync(configuration);
 
 var app = builder.Build();
+
 
 // мне лень делать по нормальному
 using var scope = app.Services.CreateScope();

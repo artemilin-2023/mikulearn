@@ -5,15 +5,15 @@ services:
       context: .
       dockerfile: HackBack.API/Dockerfile
     networks:
-    - eblangelion
+    - mikulearn_default
     ports:
     - 7090:8080
     - 7091:8081
  
 
 networks:
-  eblangelion:
-    name: eblangelion
+  mikulearn_default:
+    name: mikulearn_default
     driver: bridge
     external: true
   
