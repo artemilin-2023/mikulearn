@@ -3,8 +3,8 @@ import { TextInput, Button, PasswordInput, Group, Anchor, Text } from '@mantine/
 import { loginForm, loginFx } from './model';
 import { useForm } from '@effector-reform/react';
 import { AuthForm } from '../../shared/ui/auth-form';
-import { Link } from '@argon-router/react';
-import { routes } from '@shared/router';
+import { Link } from 'react-router-dom';
+
 export const SignInPage = () => {
   const { fields, onSubmit, errors } = useForm(loginForm);
   const { pending } = useUnit({ pending: loginFx.pending });
@@ -19,7 +19,7 @@ export const SignInPage = () => {
           <Text size="sm">
             Нет аккаунта?{' '}
             <Anchor fw={500}>
-              <Link to={routes.signUp}>Зарегистрироваться</Link>
+              <Link to="/sign-up">Зарегистрироваться</Link>
             </Anchor>
           </Text>
         </Group>

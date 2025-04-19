@@ -4,8 +4,7 @@ import { TextInput, Button, PasswordInput, Group, Anchor, Text, SegmentedControl
 import { signUpForm, signUpFx } from './model';
 import { useForm } from '@effector-reform/react';
 import { AuthForm } from '../../shared/ui/auth-form';
-import { Link } from '@argon-router/react';
-import { routes } from '@shared/router';
+import { Link } from 'react-router-dom';
 
 export const SignUpPage = () => {
   const { fields, onSubmit, errors } = useForm(signUpForm);
@@ -27,7 +26,7 @@ export const SignUpPage = () => {
           <Text size="sm">
             Уже есть аккаунт?{' '}
             <Anchor fw={500}>
-              <Link to={routes.signIn}>Войти</Link>
+              <Link to="/sign-in">Войти</Link>
             </Anchor>
           </Text>
         </Group>

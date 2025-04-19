@@ -1,12 +1,7 @@
 import { createRoot } from 'react-dom/client';
-import { allSettled, fork } from 'effector';
-import { router } from '@shared/router';
-import { createBrowserHistory } from 'history';
+import { fork } from 'effector';
 import { Provider } from 'effector-react';
 import { App } from '@app';
-import { RouterProvider } from '@argon-router/react';
-
-
 
 // global styles
 import '@mantine/core/styles.css';
@@ -20,16 +15,9 @@ const root = createRoot(document.getElementById('root')!);
 async function render() {
   const scope = fork();
 
-  await allSettled(router.setHistory, {
-    scope,
-    params: createBrowserHistory(),
-  });
-
   root.render(
     <Provider value={scope}>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
+      <App />
     </Provider>
   );
 }
