@@ -39,15 +39,15 @@ public class TestService(
             request.Access,
             createBy: userId, 
             questions: request.Questions.Select(
-                q => QuestionEntity
-                .Initialize(
-                    questionText: q.QuestionText,
-                    description: q.Description,
-                    type: q.Type,
-                    options: q.Options,
-                    answerOptions: q.AnswerOptions,
-                    correctAnswers: q.CorrectAnswers,
-                    generatedByAi: false)).ToList());
+                q => new QuestionEntity 
+                {
+                    QuestionText = q.QuestionText,
+                    Description = q.Description,
+                    QuestType = q.Type,
+                    Options = q.Options,
+                    CorrectAnswers = q.CorrectAnswers,
+                    GeneratedByAi = false,
+                }).ToList());
 
         await _testRepository.AddAsync(test, cancellationToken);
 
