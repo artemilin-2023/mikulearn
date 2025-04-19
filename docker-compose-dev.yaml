@@ -1,6 +1,5 @@
 services:
   pgadmin:
-    container_name: pgadmin4
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: root@mail.xyz
