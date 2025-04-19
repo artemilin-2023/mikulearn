@@ -60,6 +60,11 @@ services:
     build:
       context: ./src/frontend/
       dockerfile: build/Dockerfile
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   caddy:
     build:
