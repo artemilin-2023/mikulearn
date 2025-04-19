@@ -1,6 +1,7 @@
 ﻿using HackBack.API.Extensions;
 using HackBack.API.Realtime;
 using HackBack.Application.Abstractions.Realtime;
+using HackBack.Contracts.ApiContracts;
 using HackBack.Domain.Enums;
 
 namespace HackBack.API.ServiceRegistration
@@ -32,7 +33,8 @@ namespace HackBack.API.ServiceRegistration
         private static IServiceCollection AddRealtimeNotifiactions(this IServiceCollection services)
         {
             services.AddSignalR();
-            services.AddTransient<IRealTimeNotifier<TestGenerationStatus>, TestGenerationStatusNotifier>();
+            services.AddTransient<IRealTimeNotifier<TestGenerationStatus>, TestGenerationNotifier>();
+            services.AddTransient<IRealTimeNotifier<TestResponse>, TestGenerationNotifier>();
 
             return services;
         }

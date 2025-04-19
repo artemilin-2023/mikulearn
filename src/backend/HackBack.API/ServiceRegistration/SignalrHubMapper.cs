@@ -14,7 +14,7 @@ namespace HackBack.API.ServiceRegistration
             (options is null).ThenThrow(new InvalidOperationException($"Configuration must be set to field '{nameof(RealtimeOptions)}'"));
             
             // можно было бы делать это через рефлексию но и так сойдет
-            app.MapHub<TestGenerationStatusHub>(options!);
+            app.MapHub<TestGenerationHub>(options!);
         }
 
         private static void MapHub<THub>(this IEndpointRouteBuilder app, RealtimeOptions options) where THub : Hub
