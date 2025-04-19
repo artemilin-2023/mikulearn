@@ -2,6 +2,7 @@ import { createEffect, sample } from 'effector';
 import { createForm } from '@effector-reform/core';
 import { zodAdapter } from '@effector-reform/zod';
 import { z } from 'zod';
+import { api } from '@shared/api/api';
 
 type SignInValues = {
   email: string;
@@ -10,9 +11,11 @@ type SignInValues = {
 
 export const loginFx = createEffect<SignInValues, { success: true }>(
   async ({ email, password }) => {
-    await new Promise((r) => setTimeout(r, 1000));
     console.log('Email:', email);
     console.log('Password:', password);
+
+    const response = await api.post('/api/auth/login', { email, password });
+    console.log('Response:', response);
     return { success: true };
   }
 );
