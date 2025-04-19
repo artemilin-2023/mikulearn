@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './not-found-page.module.css';
 import { Link } from '@argon-router/react';
+import { routes } from '@shared/router';
+import { MainLayout } from '@shared/layouts';
 
 export const NotFoundPage = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -22,37 +24,39 @@ export const NotFoundPage = () => {
   }, []);
 
   return (
-    <div className={styles.notFoundContainer}>
-      <div
-        className={styles.content}
-        style={{
-          transform: `translate(${position.x * 0.5}px, ${position.y * 0.5}px)`,
-        }}
-      >
-        <h1 className={styles.title}>404</h1>
-        <div className={styles.message}>
-          <h2>Страница не найдена</h2>
-          <p>Упс! Кажется, вы заблудились в цифровом пространстве.</p>
-        </div>
-        <Link to="/" className={styles.homeButton}>
-          Вернуться на главную
-        </Link>
+    <MainLayout>
+      <div className={styles.notFoundContainer}>
+        <div
+          className={styles.content}
+          style={{
+            transform: `translate(${position.x * 0.5}px, ${position.y * 0.5}px)`,
+          }}
+        >
+          <h1 className={styles.title}>404</h1>
+          <div className={styles.message}>
+            <h2>Страница не найдена</h2>
+            <p>Упс! Кажется, вы заблудились в цифровом пространстве.</p>
+          </div>
+          <Link to={routes.home} className={styles.homeButton}>
+            Вернуться на главную
+          </Link>
 
-        <div className={styles.particles}>
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className={styles.particle}
-              style={{
-                animationDelay: `${i * 0.8}s`,
-                transform: `translate(${position.x * ((i % 3) + 1)}px, ${
-                  position.y * ((i % 3) + 1)
-                }px)`,
-              }}
-            />
-          ))}
+          <div className={styles.particles}>
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className={styles.particle}
+                style={{
+                  animationDelay: `${i * 0.8}s`,
+                  transform: `translate(${position.x * ((i % 3) + 1)}px, ${
+                    position.y * ((i % 3) + 1)
+                  }px)`,
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 };

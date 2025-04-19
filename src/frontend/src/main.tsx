@@ -4,6 +4,7 @@ import { router } from '@shared/router';
 import { createBrowserHistory } from 'history';
 import { Provider } from 'effector-react';
 import { App } from '@app';
+import { RouterProvider } from '@argon-router/react';
 
 // global styles
 import '@app/styles/layout.css';
@@ -23,7 +24,9 @@ async function render() {
 
   root.render(
     <Provider value={scope}>
-      <App />
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
     </Provider>
   );
 }

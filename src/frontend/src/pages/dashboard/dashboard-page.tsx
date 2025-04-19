@@ -1,4 +1,4 @@
-import { Button, TextInput } from "@mantine/core";
+import { Button, TextInput } from '@mantine/core';
 
 export const DashboardPage = () => {
   return (

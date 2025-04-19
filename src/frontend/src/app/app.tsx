@@ -1,11 +1,10 @@
-import { RouterProvider } from '@argon-router/react';
+import { MantineProvider } from '@mantine/core';
 import { RoutesView } from '@pages';
-import { router } from '@shared/router';
 
 export function App() {
   return (
-    <RouterProvider router={router}>
+    <MantineProvider>
       <RoutesView />
-    </RouterProvider>
+    </MantineProvider>
   );
 }
