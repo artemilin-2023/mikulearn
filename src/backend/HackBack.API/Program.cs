@@ -1,4 +1,4 @@
-using HackBack.API.Extensions;
+using HackBack.API.ServiceRegistration;
 using HackBack.Application.ServiceRegistration;
 using HackBack.Infrastructure.ServiceRegistration;
 using Microsoft.EntityFrameworkCore;
@@ -8,18 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-services.AddControllers();
-services.AddGraphQL();
-services.AddEndpointsApiExplorer();
-services.AddCustomSwaggerGen();
-services.AddHttpContextAccessor();
-
-services.AddAuthentificationRules(configuration);
-services.AddAuthorizationPermissionRequirements();
-
-services
-    .AddApplication()
-    .AddInfrastructure(configuration);
+await services
+    .AddApi(configuration)
+    .AddApplication(configuration)
+    .AddInfrastructureAsync(configuration);
 
 var app = builder.Build();
 
@@ -30,8 +22,11 @@ await db.Database.MigrateAsync();
 
 app.UseResultSharpLogging();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 //app.UseHttpsRedirection();
 
@@ -39,6 +34,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGraphQL();
+app.MapHubs();
 
 app.Run();

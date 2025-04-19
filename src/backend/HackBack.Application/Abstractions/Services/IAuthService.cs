@@ -11,7 +11,7 @@ public interface IAuthService
     Task<Result<string>> GenerateRefreshTokenAsync(UserEntity user, CancellationToken cancellationToken);
     Task<Result<(string accessToken, string refreshToken)>> GenerateAccessRefreshPairAsync(UserEntity user, CancellationToken cancellationToken);
     Task<Result> GenerateAndSetTokensAsync(UserEntity user, HttpResponse response, CancellationToken cancellationToken);
-    Result<Guid> GetUserIdFromAccessToken(HttpRequest request);
+    Result<Guid> GetUserIdFromHttpRequest(HttpRequest request);
     Result<Role> GetRoleFromAccessToken(HttpRequest request);
     Result ValidateToken(HttpRequest request, string header);
     Task<Result> ClearTokensAsync(HttpRequest request, HttpResponse response, CancellationToken cancellationToken);

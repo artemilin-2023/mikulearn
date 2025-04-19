@@ -21,7 +21,7 @@ public class QuestionEntity : BaseEntity<Guid>
         // конструктор для ef
     }
 
-    public QuestionEntity(
+    private QuestionEntity(
         Guid id,
         string questionText,
         string description,
@@ -40,5 +40,17 @@ public class QuestionEntity : BaseEntity<Guid>
         CorrectAnswers = correctAnswers;
         GeneratedByAi = generatedByAi;
         CreatedAt = DateTime.UtcNow;
+    }
+
+    public static QuestionEntity Initialize(
+        string questionText,
+        string description,
+        QuestionType type,
+        IEnumerable<string> options,
+        IEnumerable<string> answerOptions,
+        IEnumerable<string> correctAnswers,
+        bool generatedByAi)
+    {
+        return new QuestionEntity(Guid.NewGuid(), questionText, description, type, options, answerOptions, correctAnswers, generatedByAi);
     }
 }

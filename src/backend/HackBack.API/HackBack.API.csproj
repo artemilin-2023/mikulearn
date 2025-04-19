@@ -12,11 +12,7 @@
   <ItemGroup>
     <PackageReference Include="4q-dev.ResultSharp.HttpResult" Version="1.0.1" />
     <PackageReference Include="4q-dev.ResultSharp.Logging.MicrosoftLogger" Version="1.0.4" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.3" />
-    <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.0.3" />
-    <PackageReference Include="HotChocolate.Data" Version="15.0.3" />
-    <PackageReference Include="HotChocolate.Language" Version="15.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

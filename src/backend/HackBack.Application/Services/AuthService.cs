@@ -93,7 +93,7 @@ public class AuthService(IJwtProvider jwtProvider, ITokenStorage tokenStorage, I
         return Result.Success();
     }
 
-    public Result<Guid> GetUserIdFromAccessToken(HttpRequest request)
+    public Result<Guid> GetUserIdFromHttpRequest(HttpRequest request)
     {
         return GetTokenFromHeader(request)
             .Then(token => GetClaimFromToken(

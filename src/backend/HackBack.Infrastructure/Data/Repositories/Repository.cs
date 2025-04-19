@@ -39,9 +39,7 @@ public class Repository<TEntity, TId> : IRepository<TEntity, TId>
     public IQueryable<TEntity> AsQuery(bool tracking = false)
     {
         if (tracking)
-        {
             return _dbSet.AsQueryable();
-        }
         return _dbSet.AsNoTracking().AsQueryable();
     }
 
@@ -55,11 +53,11 @@ public class Repository<TEntity, TId> : IRepository<TEntity, TId>
 
     public async Task DeleteAsync(TId id, CancellationToken cancellationToken)
     {
-        var entity = await _dbSet.FindAsync(new object[] { id }, cancellationToken);
+        var entity = await _dbSet.FindAsync([id], cancellationToken);
         if (entity == null)
         {
-            throw new KeyNotFoundException($"Entity of type {typeof(TEntity).Name} with id {id} not found.");
-        }
+            throw new KeyNotFoundException($"Entity of type {typeof(TEntity).Name} with id {id} not found."); // вот по какой причине нужно именно исключение, почему не просто Result.Failure? Ну ладно как хотите
+        } 
         _dbSet.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
         _logger.LogDebug("Entity deleted: {Id}", id);

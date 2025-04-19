@@ -4,18 +4,16 @@ namespace HackBack.Contracts.ApiContracts;
 
 //вынести в отдельные файлы наверн
 public record QuestionPublic(
-        Guid Id,
-        string QuestionText,
-        string Description,
-        QuestionType Type,
-        IEnumerable<string> Options,
-        IEnumerable<string> AnswerOptions,
-        IEnumerable<string> CorrectAnswers,
-        DateTime CreatedAt,
-        bool GeneratedByAi
-    );
+    Guid Id,
+    string QuestionText,
+    string Description,
+    QuestionType Type,
+    IEnumerable<string>? Options,
+    DateTime CreatedAt,
+    bool GeneratedByAi
+);
 
-public record TestPublic(
+public record TestResponse(
     Guid Id,
     string Title,
     string Description,

@@ -239,6 +239,32 @@ namespace HackBack.Infrastructure.Migrations
                     b.ToTable("Tests");
                 });
 
+            modelBuilder.Entity("HackBack.Domain.Entities.TestGenerationRequestEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.ToTable("TestGenerationRequestEntity");
+                });
+
             modelBuilder.Entity("HackBack.Domain.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")

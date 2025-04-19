@@ -9,11 +9,10 @@ using System.Text.Json;
 
 namespace HackBack.Infrastructure.RabbitMQ.Producers
 {
-    public class ProducerBase<TMessage>(IChannel channel, ILoggerFactory loggerFactory) :
-        RabbitClientBase(channel, loggerFactory),
-        IProducer<TMessage>
+    public class Producer<TMessage>(IChannel channel, ILoggerFactory loggerFactory) :
+        RabbitClientBase(channel, loggerFactory)
     {
-        private readonly ILogger<ProducerBase<TMessage>> logger = loggerFactory.CreateLogger<ProducerBase<TMessage>>();
+        private readonly ILogger<Producer<TMessage>> logger = loggerFactory.CreateLogger<Producer<TMessage>>();
 
         /// <summary>
         /// Асинхронно отправляет сообщение в очередь.
@@ -30,6 +29,11 @@ namespace HackBack.Infrastructure.RabbitMQ.Producers
                 // По хорошему, надо бы вынести сериализатор в отдельный класс и внедрять зависимость через конструктор,
                 // но для хака хватит и этого варианта
                 var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request));
+
+                logger.LogInformation("Producing message with type {type} to the exchange \'{exchange}\' with routing key \'{routingKey}\'",
+                    typeof(TMessage), exchange, routingKey
+                );
+                logger.LogDebug("Message body: {body}", body);
 
                 await Channel!.BasicPublishAsync(
                     exchange: exchange,

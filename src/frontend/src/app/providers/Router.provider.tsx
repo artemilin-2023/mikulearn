@@ -14,32 +14,26 @@ import { FirstLoadOverlay } from 'shared/ui/FirstLoadOverlay/FirstLoadOverlay';
 const AnimatedRoutes = () => {
   const location = useLocation();
   const nodeRef = useRef(null);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const isFirstLoad = !localStorage.getItem('hasVisitedBefore');
 
   useEffect(() => {
-    // Устанавливаем флаг первой загрузки в false после монтирования компонента
-    const timer = setTimeout(() => {
-      setIsFirstLoad(false);
-    }, 100); // Небольшая задержка для гарантии, что DOM готов
-
-    return () => clearTimeout(timer);
-  }, []);
+    if (isFirstLoad) {
+      localStorage.setItem('hasVisitedBefore', 'true');
+    }
+  }, [isFirstLoad]);
 
   const onEnter = (node: HTMLElement) => {
     if (!node) return;
     
     if (isFirstLoad) {
-      // Специальная анимация для первого входа
       const children = Array.from(node.children);
       
-      // Сначала скрываем все элементы
       gsap.set(children, {
         y: 50,
         opacity: 0,
         scale: 0.9
       });
       
-      // Анимируем логотип или первый элемент особым образом
       const mainElements = document.querySelectorAll('.logo, h1, .title');
       if (mainElements.length > 0) {
         gsap.fromTo(
@@ -60,7 +54,6 @@ const AnimatedRoutes = () => {
         );
       }
       
-      // Затем анимируем остальные элементы
       gsap.to(children, {
         y: 0,
         opacity: 1,
@@ -74,7 +67,6 @@ const AnimatedRoutes = () => {
         }
       });
       
-      // Добавляем эффект "волны" для элементов сетки, если они есть
       const gridItems = document.querySelectorAll('.gridItem');
       if (gridItems.length > 0) {
         gsap.fromTo(
@@ -100,7 +92,6 @@ const AnimatedRoutes = () => {
         );
       }
     } else {
-      // Стандартная анимация для переходов между страницами
       gsap.fromTo(
         node.children,
         {
@@ -161,16 +152,19 @@ const AnimatedRoutes = () => {
 };
 
 export const RouterProvider = () => {
-  const [showOverlay, setShowOverlay] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(!localStorage.getItem('hasVisitedBefore'));
   
   useEffect(() => {
-    // Скрываем оверлей через некоторое время
-    const timer = setTimeout(() => {
-      setShowOverlay(false);
-    }, 2500); // Время показа оверлея
-    
-    return () => clearTimeout(timer);
-  }, []);
+    if (showOverlay) {
+      localStorage.setItem('hasVisitedBefore', 'true');
+      
+      const timer = setTimeout(() => {
+        setShowOverlay(false);
+      }, 4000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showOverlay]);
   
   return (
     <BrowserRouter>
