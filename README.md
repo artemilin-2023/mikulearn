@@ -7,10 +7,12 @@
 The project can be run in `docker` using `docker compose`
 
 1. `docker-compose.yaml` contains the definitions of all used services. An example production configuration is provided in `docker-compose-prod.yaml.example` as an override to highlight the required changes needed for the first build
-  - ```bash
+  -
+```bash
 docker compose up -d --build
 ``` to run the project on `localhost`
-  - ```bash
+  -
+```bash
 docker compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d --build
 ```
 
