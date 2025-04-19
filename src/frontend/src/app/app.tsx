@@ -1,11 +1,7 @@
-import { MantineProvider, createTheme } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { RoutesView } from '@pages';
 
-const theme = createTheme({
-  primaryColor: 'blue',
-  fontFamily: 'Inter, sans-serif',
-  defaultRadius: 'md',
-});
+import { theme } from "@app/styles/app-theme"
 
 export function App() {
   return (

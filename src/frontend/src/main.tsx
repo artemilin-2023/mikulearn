@@ -6,7 +6,10 @@ import { Provider } from 'effector-react';
 import { App } from '@app';
 import { RouterProvider } from '@argon-router/react';
 
+
+
 // global styles
+import '@mantine/core/styles.css';
 import '@app/styles/layout.css';
 import '@app/styles/colors.css';
 import '@app/styles/reset.css';
