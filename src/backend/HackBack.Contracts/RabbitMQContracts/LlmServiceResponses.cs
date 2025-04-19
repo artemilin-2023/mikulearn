@@ -1,6 +1,7 @@
 ﻿using HackBack.Domain.Enums;
 using ResultSharp.Core;
 using MediatR;
+using HackBack.Domain.Entities;
 
 namespace HackBack.Contracts.RabbitMQContracts;
 
@@ -14,4 +15,11 @@ public record LlmStatusResponse :
     IRequest<Result>
 {
     public TestGenerationStatus Status { get; init; }
+}
+
+public record ResultLlmResponse :
+    ResponseBase,
+    IRequest<Result>
+{
+    public required TestEntity TestEntity { get; init; }
 }

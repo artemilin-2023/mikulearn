@@ -1,4 +1,6 @@
-﻿using HackBack.Infrastructure.Models;
+﻿using System.Text;
+using System.Text.Json;
+using HackBack.Infrastructure.Models;
 using HackBack.Infrastructure.RabbitMQ.Consumers.Abstractions;
 using MediatR;
 using RabbitMQ.Client.Events;
@@ -7,8 +9,6 @@ using ResultSharp.Errors;
 using ResultSharp.Extensions.FunctionalExtensions.Async;
 using ResultSharp.Extensions.FunctionalExtensions.Sync;
 using ResultSharp.Logging;
-using System.Text;
-using System.Text.Json;
 
 namespace HackBack.Infrastructure.RabbitMQ.Consumers.Handlers
 {
@@ -57,6 +57,8 @@ namespace HackBack.Infrastructure.RabbitMQ.Consumers.Handlers
         private async Task<Result> HandleResultMessageAsync(string payload, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+            //var message = Deserialize<ResultLlmServiceResponse>(payload)
+            //    .Then(msg => _mediarot.Send(msg))
         }
     }
 }
