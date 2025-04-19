@@ -1,6 +1,11 @@
 import { createEvent, createStore, sample } from 'effector';
 
-type User = {};
+type User = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+};
 
 const $innerUser = createStore<User | null>(null);
 export const $user = $innerUser.map((v) => v);
