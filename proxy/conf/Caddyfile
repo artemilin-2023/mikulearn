@@ -10,7 +10,8 @@
   @host host {$CADDY_HOST:*}
   handle @host {
     handle /api/* {
-      uri strip_prefix /api
+
+      uri /swagger strip_prefix /api
       reverse_proxy backend:8080
     }
     handle {

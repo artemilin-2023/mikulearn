@@ -21,6 +21,9 @@ services:
     environment:
       # Change to Release if needed
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Rabbit=amqp://rmuser:rmpassword@rabbitmq:5672
+      - ConnectionStrings__Redis=redis:6379
+      - ConnectionStrings__Postgres=Host=postgres;Database=database;Username=postgres;Password=password
     depends_on:
       postgres:
         condition: service_healthy
