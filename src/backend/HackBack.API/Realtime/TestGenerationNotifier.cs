@@ -7,14 +7,14 @@ using ResultSharp.Core;
 
 namespace HackBack.API.Realtime
 {
-    public class TestGenerationNotifier(IHubContext<TestGenerationStatusHub> hubContext) : 
+    public class TestGenerationNotifier(IHubContext<TestGenerationHub> hubContext) : 
         IRealTimeNotifier<TestGenerationStatus>,
         IRealTimeNotifier<TestResponse>
     {
         private const string RecieveStatusMethod = "RecieveTestGenerationStatus";
         private const string RecieveResultMethod = "RecieveTestGenerationResult";
 
-        private readonly IHubContext<TestGenerationStatusHub> _hubContext = hubContext;
+        private readonly IHubContext<TestGenerationHub> _hubContext = hubContext;
 
         public async Task<Result> SendNotificationAsync(Guid sessionId, TestGenerationStatus notification, CancellationToken cancellationToken)
         {
