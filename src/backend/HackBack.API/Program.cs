@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
+configuration.AddEnvironmentVariables();
 
 
 await services
@@ -32,6 +33,8 @@ if (app.Environment.IsDevelopment())
 
 
 //app.UseHttpsRedirection();
+
+app.UseCors(policy => policy.AllowAnyHeader().AllowCredentials())
 
 app.UseAuthentication();
 app.UseAuthorization();
