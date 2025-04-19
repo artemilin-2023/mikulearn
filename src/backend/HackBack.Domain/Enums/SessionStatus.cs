@@ -2,7 +2,6 @@
 
 public enum SessionStatus
 {
-   InProgress,
-   Paused,
-   Ended
+    InProgress,
+    Ended
 }
