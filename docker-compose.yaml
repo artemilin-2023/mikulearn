@@ -76,7 +76,7 @@ services:
       dockerfile: Dockerfile
     environment:
       # Uncomment, add the domain, host and CF token. Voila, you have HTTPS
-      #CADDY_EXTRA_DIRECTIVES: import tls
+      #CADDY_EXTRA_DIRECTIVES: import cloudflare_dns
       #CADDY_CERT_DOMAIN: "*.y7o4ka.xyz"
       #CADDY_HOST: ebangelion.y7o4ka.xyz
       CLOUDFLARE_API_TOKEN: <API_TOKEN_HERE>
