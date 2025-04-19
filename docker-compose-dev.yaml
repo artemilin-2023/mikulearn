@@ -10,5 +10,12 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
+
+  frontend:
+    build:
+      target: dev
+    volumes:
+      - ./src/frontend:/app
+
 volumes:
   pgadmin-data:
