@@ -2,7 +2,7 @@ import axios from 'axios';
 import { $token } from '@shared/user';
 
 export const api = axios.create({
-  baseURL: 'https://localhost',
+  baseURL: window.location.origin,
 });
 
 let currentToken: string | null = null;
