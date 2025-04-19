@@ -2,7 +2,7 @@
 
 \<DESCRIPTION: FILL ME>
 
-## Install and run
+## Installation and launch
 
 The project can be run in `docker` using `docker compose`
 
@@ -28,6 +28,17 @@ The backend is a C# [ASP.NET](https://learn.microsoft.com/ru-ru/aspnet/core) app
 2. Application itself is configured with `backend`'s environment variables. They directly modify the appsettings of the application ([see more](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-9.0#evcp))
   - `ALLOWED_CORS_HOSTS` directly affects the `Access-Control-Allow-Origin` response header ([see more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS#the_http_response_headers)). It is a list of allowed origins delimeted by `;`. Has to be set to the application hostname
   - `ConnectionStrings__OpenRouter` allows the application to use any OpenAI-compatible API like [OpenRouter](https://openrouter.ai/)
+
+## Development
+
+There is a `docker-compose-dev.yaml` made as an override specifically for development purposes. It allows hot-reload of frontend code as well as adds management utilities like `rabbitmq-management` and `pgadmin`. You can use it with the following command:
+`docker compose -f docker-compose.yaml -f docker-compose-dev.yaml down --remove-orphans && docker compose -f docker-compose.yaml -f docker-compose-dev.yaml up -d --build`
+
+## Credits
+
+\<CREDITS: FILL ME>
+
+## Notable Mention
 
 ```
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⢲⣦⡀⠀⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

@@ -89,14 +89,13 @@ services:
 
   rabbitmq:
     hostname: rabbitmq
-    image: rabbitmq:4-management
+    image: rabbitmq:4
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=rmuser
       - RABBITMQ_DEFAULT_PASS=rmpassword
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
     ports:
-      - 15672:15672
       - 5672:5672
     healthcheck:
       test: rabbitmq-diagnostics -q ping
