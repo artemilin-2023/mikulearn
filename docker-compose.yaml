@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: src/backend 
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+      - 8081:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d database"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@mail.xyz
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - 5050:80
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend-build:
+    build:
+      context: ./src/frontend/
+      dockerfile: Dockerfile
+    volumes:
+      - frontend-build:/app/dist
+
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      frontend-build:
+        condition: service_completed_successfully
+      backend:
+        condition: service_started
+    ports:
+      - 3000:80
+    volumes:
+      - frontend-build:/usr/share/nginx/html
+      - ./configurations/nginx.conf:/etc/nginx/nginx.conf:ro
+
+
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+  redis-data:
+  frontend-build:

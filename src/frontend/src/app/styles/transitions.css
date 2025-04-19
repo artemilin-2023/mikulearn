@@ -1,0 +1,83 @@
+/* Анимация страниц */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 400ms, transform 400ms;
+} 
+
+
+/* Добавьте эти стили в src/frontend/src/app/styles/transitions.css */
+
+/* Анимация для первого входа */
+.first-load-enter {
+  opacity: 0;
+}
+
+.first-load-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms;
+}
+
+/* Эффект появления для элементов */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Класс для элементов, которые должны анимироваться при первой загрузке */
+.animate-on-first-load {
+  opacity: 0;
+}
+
+.animate-on-first-load.visible {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Эффект волны для сетки элементов */
+.grid-animation-container > * {
+  opacity: 0;
+}
+
+.grid-animation-container.visible > * {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.grid-animation-container.visible > *:nth-child(1) { animation-delay: 0.1s; }
+.grid-animation-container.visible > *:nth-child(2) { animation-delay: 0.2s; }
+.grid-animation-container.visible > *:nth-child(3) { animation-delay: 0.3s; }
+.grid-animation-container.visible > *:nth-child(4) { animation-delay: 0.4s; }
+.grid-animation-container.visible > *:nth-child(5) { animation-delay: 0.5s; }
+.grid-animation-container.visible > *:nth-child(6) { animation-delay: 0.6s; }

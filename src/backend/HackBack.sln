@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackBack.Infrastructure", "HackBack.Infrastructure\HackBack.Infrastructure.csproj", "{0EB24181-18AC-4E46-B1F2-4976AF94F57A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackBack.Application", "HackBack.Application\HackBack.Application.csproj", "{DBB1D0AF-AFF1-460B-94FF-B23A778C20D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackBack.Domain", "HackBack.Domain\HackBack.Domain.csproj", "{69C0B072-846D-4B17-9A33-6AF1A29B7C45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackBack.Common", "HackBack.Common\HackBack.Common.csproj", "{0A042137-01B3-4369-AE5F-AD7A17EED99E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackBack.API", "HackBack.API\HackBack.API.csproj", "{4AF2227A-149D-4FB8-B929-1FE64D5FC5FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackBack.Contracts", "HackBack.Contracts\HackBack.Contracts.csproj", "{870648CD-2071-457D-9C27-9BF45C1F100C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EB24181-18AC-4E46-B1F2-4976AF94F57A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EB24181-18AC-4E46-B1F2-4976AF94F57A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EB24181-18AC-4E46-B1F2-4976AF94F57A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EB24181-18AC-4E46-B1F2-4976AF94F57A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBB1D0AF-AFF1-460B-94FF-B23A778C20D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB1D0AF-AFF1-460B-94FF-B23A778C20D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB1D0AF-AFF1-460B-94FF-B23A778C20D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB1D0AF-AFF1-460B-94FF-B23A778C20D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C0B072-846D-4B17-9A33-6AF1A29B7C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C0B072-846D-4B17-9A33-6AF1A29B7C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C0B072-846D-4B17-9A33-6AF1A29B7C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C0B072-846D-4B17-9A33-6AF1A29B7C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A042137-01B3-4369-AE5F-AD7A17EED99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A042137-01B3-4369-AE5F-AD7A17EED99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A042137-01B3-4369-AE5F-AD7A17EED99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A042137-01B3-4369-AE5F-AD7A17EED99E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AF2227A-149D-4FB8-B929-1FE64D5FC5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AF2227A-149D-4FB8-B929-1FE64D5FC5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AF2227A-149D-4FB8-B929-1FE64D5FC5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AF2227A-149D-4FB8-B929-1FE64D5FC5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870648CD-2071-457D-9C27-9BF45C1F100C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870648CD-2071-457D-9C27-9BF45C1F100C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870648CD-2071-457D-9C27-9BF45C1F100C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870648CD-2071-457D-9C27-9BF45C1F100C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
