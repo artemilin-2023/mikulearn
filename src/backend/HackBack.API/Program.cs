@@ -2,6 +2,7 @@ using HackBack.API.ServiceRegistration;
 using HackBack.Application.ServiceRegistration;
 using HackBack.Infrastructure.ServiceRegistration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +35,11 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
-app.UseCors(policy => policy.AllowAnyHeader().AllowCredentials())
+app.UseCors(policy => 
+    policy.AllowAnyHeader()
+        .AllowCredentials()
+        .WithOrigins(configuration.GetSection("ALLOWED_CORS_HOSTS").Get<string>()!.Split(';')!) // ээээээ нууу эээээ да
+);
 
 app.UseAuthentication();
 app.UseAuthorization();
