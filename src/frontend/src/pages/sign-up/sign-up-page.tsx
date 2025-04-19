@@ -1,9 +1,12 @@
 import { TextInput, Button, PasswordInput, Group, Anchor, Text, SegmentedControl } from '@mantine/core';
 import { AuthForm } from '@shared/ui/auth-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { api } from '@shared/api/api';
+import { store } from '@shared/store/store';
 import { z } from 'zod';
+import { useState } from 'react';
 
 const signUpSchema = z.object({
   email: z.string().email({ message: 'Введите корректный email' }),
@@ -15,7 +18,9 @@ const signUpSchema = z.object({
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export const SignUpPage = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: '',
@@ -25,13 +30,65 @@ export const SignUpPage = () => {
     }
   });
 
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
-  };
+  const onSubmit = async (data: SignUpFormData) => {
+    try {
+      setLoading(true);
+      
+      const response = await api.post('/account/register', data);
+      
+      if (response.status === 200) {
+        // Save token to localStorage
+        if (response.headers?.authorization) {
+          const token = response.headers.authorization.substring(7);
+          localStorage.setItem('token', token);
+          store.setToken(token);
+        }
+        
+        // Fetch user data
+        try {
+          const userResponse = await api.get('/account/me');
+          if (userResponse.data) {
+            store.setUser({
+              id: userResponse.data.id,
+              email: userResponse.data.email,
+              name: userResponse.data.name || '',
+              role: userResponse.data.role || '',
+            });
+            store.setIsAuth(true);
+            
+            // Redirect to personal cabinet
+            navigate('/personal-cabinet');
+          }
+        } catch (userError) {
+          console.error('Error fetching user data:', userError);
+        }
+      }
+    } catch (error: unknown) {
+      console.error('Registration error:', error);
+      
+      // Handle registration errors
+      if (error && typeof error === 'object' && 'response' in error) {
+        const errorObj = error as { response?: { status?: number; data?: unknown } };
+        
+        if (errorObj.response?.status === 400) {
+          setError('email', { 
+            message: 'Пользователь с таким email уже существует' 
+          });
+        } else {
+          setError('email', { 
+            message: 'Произошла ошибка при регистрации' 
+          });
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
+  };  
 
   return (
     <AuthForm
       title="Регистрация"
+      description="Создайте новый аккаунт"
       onSubmit={handleSubmit(onSubmit)}
       footer={
         <Group justify="space-between" mt="md">
@@ -107,6 +164,7 @@ export const SignUpPage = () => {
         color=' var(--gradient-primary-secondary-light)' 
         mt="xs" 
         type="submit" 
+        loading={loading}
         styles={{ 
           label: { 
             color: 'black' 

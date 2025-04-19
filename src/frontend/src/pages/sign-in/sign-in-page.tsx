@@ -1,6 +1,6 @@
 import { TextInput, Button, PasswordInput, Group, Anchor, Text } from '@mantine/core';
 import { AuthForm } from '@shared/ui/auth-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,7 +17,8 @@ type SignInFormData = z.infer<typeof signInSchema>;
 
 export const SignInPage = () => {
   const [loading, setLoading] = useState(false);
-  const { control, handleSubmit, formState: { errors } } = useForm<SignInFormData>({
+  const navigate = useNavigate();
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: '',
@@ -28,24 +29,55 @@ export const SignInPage = () => {
   const onSubmit = async (data: SignInFormData) => {
     try {
       setLoading(true);
-      console.log('Email:', data.email);
-      console.log('Password:', data.password);
-
-      const response = await api.post('/api/account/login', { email: data.email, password: data.password });
-      console.log('Response:', response);
       
-      if (response.data && response.data.id) {
-        store.setUser({
-          id: response.data.id,
-          email: response.data.email || data.email,
-          name: response.data.name || '',
-          role: response.data.role || '',
-        });
-        store.setIsAuth(true);
-        store.setToken(response.data.token);
+      const response = await api.post('/account/login', { 
+        email: data.email, 
+        password: data.password 
+      });
+      
+      if (response.status === 200) {
+        // Save token to localStorage
+        if (response.headers?.authorization) {
+          const token = response.headers.authorization.substring(7);
+          localStorage.setItem('token', token);
+          store.setToken(token);
+        }
+        
+        // Fetch user data
+        try {
+          const userResponse = await api.get('/account/me');
+          if (userResponse.data) {
+            store.setUser({
+              id: userResponse.data.id,
+              email: userResponse.data.email,
+              name: userResponse.data.name || '',
+              role: userResponse.data.role || '',
+            });
+            store.setIsAuth(true);
+            
+            // Redirect to personal cabinet
+            navigate('/personal-cabinet');
+          }
+        } catch (userError) {
+          console.error('Error fetching user data:', userError);
+        }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
+      
+      // Handle login errors
+      if (error && typeof error === 'object' && 'response' in error) {
+        const errorObj = error as { response?: { status?: number } };
+        if (errorObj.response?.status === 400 || errorObj.response?.status === 401) {
+          setError('password', { 
+            message: 'Неверный email или пароль' 
+          });
+        } else {
+          setError('email', { 
+            message: 'Произошла ошибка при входе' 
+          });
+        }
+      }
     } finally {
       setLoading(false);
     }

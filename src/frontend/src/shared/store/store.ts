@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { createContext, useContext } from "react";
+import { api } from "@shared/api/api";
 
 type User = {
     id: string;
@@ -10,24 +11,45 @@ type User = {
 
 class Store {
     user: User | null = null;
-	isAuth: boolean = false;
+    isAuth: boolean = false;
     token: string | null = null;
+    initialized: boolean = false;
     
     constructor() {
-		makeAutoObservable(this)
+        makeAutoObservable(this);
+        this.init();
+    }
+
+    async init() {
+        this.loadTokenFromStorage();
+        if (this.token) {
+            try {
+                const response = await api.get('/account/me');
+                if (response.data) {
+                    this.setUser(response.data);
+                    this.setIsAuth(true);
+                }
+            } catch (error) {
+                console.error('Failed to fetch user data on init', error);
+                // Token might be invalid or expired
+                this.clearAuth();
+            }
+        }
+        this.initialized = true;
     }
 
     setUser(user: User) {
         this.user = user;
     }
 
-	setIsAuth(isAuth: boolean) {
-		this.isAuth = isAuth;
-	}
+    setIsAuth(isAuth: boolean) {
+        this.isAuth = isAuth;
+    }
 
-	setToken(token: string) {
-		this.token = token;
-	}
+    setToken(token: string) {
+        this.token = token;
+        this.saveTokenToStorage();
+    }
 
     loadTokenFromStorage() {
         const token = localStorage.getItem('token');
@@ -40,6 +62,13 @@ class Store {
         if (this.token) {
             localStorage.setItem('token', this.token);
         }
+    }
+
+    clearAuth() {
+        this.user = null;
+        this.isAuth = false;
+        this.token = null;
+        localStorage.removeItem('token');
     }
 }
 
