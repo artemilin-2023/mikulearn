@@ -1,5 +1,6 @@
+import { useEffect } from 'react'
 import { useUnit } from 'effector-react';
-import { TextInput, Button, PasswordInput, Group, Anchor, Text } from '@mantine/core';
+import { TextInput, Button, PasswordInput, Group, Anchor, Text, SegmentedControl } from '@mantine/core';
 import { signUpForm, signUpFx } from './model';
 import { useForm } from '@effector-reform/react';
 import { AuthForm } from '../../shared/ui/auth-form';
@@ -9,6 +10,12 @@ import { routes } from '@shared/router';
 export const SignUpPage = () => {
   const { fields, onSubmit, errors } = useForm(signUpForm);
   const { pending } = useUnit({ pending: signUpFx.pending });
+  
+  useEffect(() => { 
+    fields.email.onChange("test@gmail.com")
+    fields.password.onChange("123qwe")
+    fields.username.onChange("test")
+  },[])
 
   return (
     <AuthForm
@@ -40,8 +47,8 @@ export const SignUpPage = () => {
         label="Полное имя"
         placeholder="Иванов Иван Иванович"
         required
-        value={fields.fullName.value}
-        onChange={(e) => fields.fullName.onChange(e.currentTarget.value)}
+        value={fields.username.value}
+        onChange={(e) => fields.username.onChange(e.currentTarget.value)}
       />
 
       <PasswordInput
@@ -53,7 +60,27 @@ export const SignUpPage = () => {
         error={errors.password}
       />
 
-      <Button color="blue" fullWidth mt="xl" type="submit" loading={pending}>
+      <SegmentedControl
+        data={[
+          { value: '2', label: 'Я студент' },
+          { value: '3', label: 'Я преподаватель' }
+        ]}
+        value={fields.role.value.toString()}
+        onChange={(value) => fields.role.onChange(Number(value))}
+      />
+
+      <Button 
+        fullWidth 
+        color=' var(--gradient-primary-secondary-light)' 
+        mt="xs" 
+        type="submit" 
+        loading={pending}
+        styles={{ 
+          label: { 
+            color: 'black' 
+          } 
+        }}
+      >
         Зарегистрироваться
       </Button>
     </AuthForm>
