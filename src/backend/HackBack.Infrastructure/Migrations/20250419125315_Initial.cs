@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackBack.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class HzIluhaTamChtotoPomenualAMigratiuNeSdelal : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,21 @@ namespace HackBack.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TestGenerationRequestEntity",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestGenerationRequestEntity", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,10 +120,9 @@ namespace HackBack.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     QuestionText = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    OptionsSerialized = table.Column<string>(type: "text", nullable: false),
-                    AnswerOptionsSerialized = table.Column<string>(type: "text", nullable: false),
-                    CorrectAnswersSerialized = table.Column<string>(type: "text", nullable: false),
+                    QuestType = table.Column<int>(type: "integer", nullable: false),
+                    Options = table.Column<string[]>(type: "text[]", nullable: false),
+                    CorrectAnswers = table.Column<string[]>(type: "text[]", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     GeneratedByAi = table.Column<bool>(type: "boolean", nullable: false),
                     TestId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -197,6 +211,11 @@ namespace HackBack.Infrastructure.Migrations
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TestGenerationRequestEntity_CreatedBy",
+                table: "TestGenerationRequestEntity",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoleEntity_RoleId",
                 table: "UserRoleEntity",
                 column: "RoleId");
@@ -216,6 +235,9 @@ namespace HackBack.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RolePermissionEntity");
+
+            migrationBuilder.DropTable(
+                name: "TestGenerationRequestEntity");
 
             migrationBuilder.DropTable(
                 name: "UserRoleEntity");

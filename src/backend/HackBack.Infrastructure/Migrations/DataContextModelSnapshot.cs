@@ -68,10 +68,6 @@ namespace HackBack.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string[]>("AnswerOptions")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.Property<string[]>("CorrectAnswers")
                         .IsRequired()
                         .HasColumnType("text[]");
@@ -90,15 +86,15 @@ namespace HackBack.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<int>("QuestType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("TestId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
