@@ -4,8 +4,12 @@
   }
 }
 
-{$CADDY_DOMAIN:localhost} {
+{$CADDY_CERT_DOMAIN:localhost} {
   {$CADDY_EXTRA_DIRECTIVES}
-  reverse_proxy /api/* backend:8080
-  reverse_proxy frontend:3000
+
+  @host host {$CADDY_HOST:*}
+  handle @host {
+    reverse_proxy /api/* backend:8080
+    reverse_proxy frontend:3000
+  }
 }
