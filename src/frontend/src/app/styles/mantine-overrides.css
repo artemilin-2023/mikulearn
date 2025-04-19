@@ -1,0 +1,82 @@
+/* Mantine components style overrides */
+
+/* Buttons */
+.mantine-Button-root {
+  font-weight: 500;
+  transition: var(--transition-normal);
+}
+
+.mantine-Button-filled {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.mantine-Button-filled:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.mantine-Button-outline {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.mantine-Button-outline:hover {
+  background-color: rgba(6, 182, 212, 0.1);
+}
+
+/* Inputs */
+.mantine-TextInput-root,
+.mantine-Textarea-root,
+.mantine-Select-root,
+.mantine-NumberInput-root {
+  margin-bottom: var(--spacing-md);
+}
+
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-Select-input,
+.mantine-NumberInput-input {
+  border-color: #e2e8f0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: var(--transition-fast);
+}
+
+.mantine-TextInput-input:focus,
+.mantine-Textarea-input:focus,
+.mantine-Select-input:focus,
+.mantine-NumberInput-input:focus {
+  border-color: var(--color-primary);
+}
+
+/* Cards */
+.mantine-Card-root {
+  background-color: var(--color-background);
+  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.mantine-Card-root:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Modal */
+.mantine-Modal-content {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .mantine-TextInput-input,
+  .mantine-Textarea-input,
+  .mantine-Select-input,
+  .mantine-NumberInput-input {
+    border-color: #4a5568;
+  }
+  
+  .mantine-Card-root {
+    border-color: #4a5568;
+  }
+} 
