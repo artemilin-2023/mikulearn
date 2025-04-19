@@ -19,6 +19,7 @@ namespace HackBack.Application.ServiceRegistration
         {
             services.AddScoped<IAuthService, AuthService>()
                 .AddScoped<IAccountService, AccountService>()
+                .AddScoped<IQuizService, QuizService>()
                 .AddScoped<IPermissionService, PermissionService>()
                 .AddScoped<IFileService, FileService>()
                 .AddScoped<ITestService, TestService>()
