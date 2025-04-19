@@ -13,7 +13,6 @@ public class TestEntityConfiguration : IEntityTypeConfiguration<TestEntity>
         builder.Property(t => t.Description).IsRequired();
         builder.HasMany(t => t.Questions)
                .WithOne(q => q.Test)
-               .HasForeignKey(q => q.TestId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }

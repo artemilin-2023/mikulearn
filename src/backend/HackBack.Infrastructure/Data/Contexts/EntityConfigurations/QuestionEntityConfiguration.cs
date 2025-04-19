@@ -17,15 +17,11 @@ namespace HackBack.Infrastructure.Data.Contexts.EntityConfigurations
 
             builder.Property(x => x.QuestionText).IsRequired();
             builder.Property(x => x.Description).IsRequired();
-            builder.Property(x => x.Type)
+            builder.Property(x => x.QuestType)
                 .HasConversion(new EnumToNumberConverter<QuestionType, int>())
                 .IsRequired();
 
             builder.Property(e => e.Options)
-                .IsRequired()
-                .HasConversion<string>();
-
-            builder.Property(e => e.AnswerOptions)
                 .IsRequired()
                 .HasConversion<string>();
 
@@ -39,8 +35,7 @@ namespace HackBack.Infrastructure.Data.Contexts.EntityConfigurations
 
             builder
                 .HasOne(q => q.Test)
-                .WithMany(t => t.Questions)
-                .HasForeignKey(q => q.TestId);
+                .WithMany(t => t.Questions);
         }
     }
 }
