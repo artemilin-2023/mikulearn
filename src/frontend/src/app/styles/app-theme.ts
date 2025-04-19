@@ -51,5 +51,38 @@ export const theme = createTheme({
     },
     defaultRadius: 'md',
     fontFamily: 'inherit',
+    components: {
+        Button: {
+            styles: {
+                root: {
+                    fontWeight: 500,
+                    '&[data-variant="gradient"]': {
+                        background: 'var(--gradient-primary-secondary-light)',
+                        color: 'var(--color-text)',
+                        transition: '0.3s ease-in-out',
+                        backgroundSize: '200% 100%',
+                        backgroundPosition: '0% 0%',
+                        '&:hover': {
+                            backgroundPosition: '100% 0%',
+                            animation: 'gradientShift 1.5s ease infinite',
+                        },
+                    },
+                },
+            },
+        },
+    },
 })
+
+// Add keyframes for gradient animation
+if (typeof document !== 'undefined') {
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    `;
+    document.head.appendChild(styleElement);
+}
       
