@@ -1,0 +1,16 @@
+.title {
+  font-family: 'Greycliff CF', sans-serif;
+  font-weight: 900;
+}
+
+.form {
+  width: 100%;
+}
+
+.socialButton {
+  transition: background-color 0.3s ease;
+}
+
+.socialButton:hover {
+  background-color: var(--mantine-color-gray-0);
+} 

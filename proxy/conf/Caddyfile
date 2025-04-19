@@ -1,0 +1,20 @@
+(tls) {
+  tls {
+    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+  }
+}
+
+{$CADDY_CERT_DOMAIN:localhost} {
+  {$CADDY_EXTRA_DIRECTIVES}
+
+  @host host {$CADDY_HOST:*}
+  handle @host {
+    handle /api/* {
+      uri strip_prefix /api
+      reverse_proxy backend:8080
+    }
+    handle {
+      reverse_proxy frontend:3000
+    }
+  }
+}

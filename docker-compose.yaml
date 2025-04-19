@@ -18,6 +18,9 @@ services:
     build:
       context: src/backend
       dockerfile: Dockerfile
+    environment:
+      # Change to Release if needed
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,15 +60,24 @@ services:
     build:
       context: ./src/frontend/
       dockerfile: build/Dockerfile
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   caddy:
     build:
       context: ./proxy/
       dockerfile: Dockerfile
     environment:
+      # Uncomment, add the domain, host and CF token. Voila, you have HTTPS
+      #CADDY_EXTRA_DIRECTIVES: import tls
+      #CADDY_CERT_DOMAIN: "*.y7o4ka.xyz"
+      #CADDY_HOST: ebangelion.y7o4ka.xyz
       CLOUDFLARE_API_TOKEN: <API_TOKEN_HERE>
     volumes:
-      - ./conf:/etc/caddy
+      - ./proxy/conf:/etc/caddy
       - caddy-data:/data
     ports:
       - 80:80
