@@ -9,9 +9,12 @@
 
   @host host {$CADDY_HOST:*}
   handle @host {
-    reverse_proxy /api/* backend:8080 {
-      rewrite /api/ /
+    handle /api/* {
+      uri strip_prefix /api
+      reverse_proxy backend:8080
     }
-    reverse_proxy frontend:3000
+    handle {
+      reverse_proxy frontend:3000
+    }
   }
 }
