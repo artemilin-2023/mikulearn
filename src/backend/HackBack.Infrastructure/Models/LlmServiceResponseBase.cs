@@ -1,6 +1,9 @@
-﻿namespace HackBack.Infrastructure.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace HackBack.Infrastructure.Models;
 
 internal record LlmServiceResponseBase
 {
-    internal virtual ResponseType Type { get; set; }
+    [JsonPropertyName("Type")]
+    public virtual ResponseType Type { get; set; }
 }

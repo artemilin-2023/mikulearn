@@ -4,13 +4,13 @@ import pika
 import uuid
 import logging
 from datetime import datetime
-from enum import Enum
+from enum import Enum, IntEnum
 import time
 from typing import Dict, List, Optional, Any
 
 # Настройка логирования
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,  # DEBUG режим для отладки
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
@@ -22,6 +22,11 @@ class TestGenerationStatus(str, Enum):
     FAILED = "Failed"
     SUCCEEDED = "Succeeded"
 
+# Константы для типов ответов (соответствуют C# enum)
+class ResponseType(IntEnum):
+    STATUS = 0  # Соответствует C# enum ResponseType.Status
+    RESULT = 1  # Соответствует C# enum ResponseType.Result
+
 # Конфигурация из переменных окружения с значениями по умолчанию из appsettings.json
 RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://rmuser:rmpassword@rabbitmq:5672")
 TASK_QUEUE_NAME = os.getenv("TASK_QUEUE_NAME", "task_queue")
@@ -29,6 +34,13 @@ RESPONSE_QUEUE_NAME = os.getenv("RESPONSE_QUEUE_NAME", "response_queue")
 TASK_ROUTING_KEY = os.getenv("TASK_ROUTING_KEY", "llm.tasks")
 RESPONSE_ROUTING_KEY = os.getenv("RESPONSE_ROUTING_KEY", "llm.response")
 EXCHANGE_NAME = os.getenv("EXCHANGE_NAME", "llm.services")
+
+# Класс для сериализации Enum в JSON
+class EnumEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Enum):
+            return int(obj)
+        return super().default(obj)
 
 class LlmService:
     def __init__(self):
@@ -87,17 +99,26 @@ class LlmService:
     def send_status_update(self, request_id: str, status: TestGenerationStatus):
         """Отправка обновления статуса в очередь ответов"""
         try:
-            message = {
-                "RequestId": request_id,
-                "Status": status
+            # Создаем объект ответа в формате, ожидаемом C# десериализатором
+            # Body объект будет десериализован в LlmStatusResponse
+            status_response = {
+                "Type": int(ResponseType.STATUS),
+                "Body": {
+                    "RequestId": request_id,
+                    "Status": status
+                }
             }
+            
+            # Преобразуем в JSON строку и логируем для отладки
+            json_message = json.dumps(status_response)
+            logger.debug(f"Отправляемое JSON сообщение (статус): {json_message}")
             
             self.channel.basic_publish(
                 exchange=EXCHANGE_NAME,
                 routing_key=RESPONSE_ROUTING_KEY,
-                body=json.dumps(message).encode('utf-8'),
+                body=json_message.encode('utf-8'),
                 properties=pika.BasicProperties(
-                    delivery_mode=2,  # делаем сообщение persistent
+                    delivery_mode=2,
                     content_type='application/json'
                 )
             )
@@ -108,15 +129,24 @@ class LlmService:
     def send_test_result(self, request_id: str, test_entity: Dict):
         """Отправка результата генерации теста в очередь ответов"""
         try:
-            message = {
-                "RequestId": request_id,
-                "TestEntity": test_entity
+            # Создаем объект ответа в формате, ожидаемом C# десериализатором
+            # Body объект будет десериализован в ResultLlmResponse
+            result_response = {
+                "Type": int(ResponseType.RESULT),
+                "Body": {
+                    "RequestId": request_id,
+                    "TestEntity": test_entity
+                }
             }
+            
+            # Преобразуем в JSON строку и логируем для отладки
+            json_message = json.dumps(result_response)
+            logger.debug(f"Отправляемое JSON сообщение (результат): {json_message}")
             
             self.channel.basic_publish(
                 exchange=EXCHANGE_NAME,
                 routing_key=RESPONSE_ROUTING_KEY,
-                body=json.dumps(message).encode('utf-8'),
+                body=json_message.encode('utf-8'),
                 properties=pika.BasicProperties(
                     delivery_mode=2,
                     content_type='application/json'
@@ -235,7 +265,7 @@ class LlmService:
                 self.connection.close()
 
 if __name__ == "__main__":
-    time.sleep(10)
+    # time.sleep(10)
     
     service = LlmService()
     

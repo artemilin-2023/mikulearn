@@ -21,7 +21,7 @@ services:
     environment:
       # Change to Release if needed
       - ASPNETCORE_ENVIRONMENT=Development
-      - ALLOWED_CORS_HOSTS=http://localhost:5137
+      - ALLOWED_CORS_HOSTS=http://localhost:5137;https://localhost:443;http://localhost:80
       - ConnectionStrings__Rabbit=amqp://rmuser:rmpassword@rabbitmq:5672
       - ConnectionStrings__Redis=redis:6379
       - ConnectionStrings__Postgres=Host=postgres;Database=database;Username=postgres;Password=password
