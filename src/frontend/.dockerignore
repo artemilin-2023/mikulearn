@@ -3,7 +3,7 @@ node_modules
 bower_components
 
 # Production build
-build
+dist
 
 # Log files
 npm-debug.log*

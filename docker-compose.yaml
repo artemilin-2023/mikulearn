@@ -15,14 +15,9 @@ x-minio-common: &minio-common
 
 services:
   backend:
-    build: 
-      context: src/backend 
+    build:
+      context: src/backend
       dockerfile: Dockerfile
-    networks:
-      - eblangelion
-    ports:
-      - 8080:8080
-      - 8081:8081
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,8 +30,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=database
-    networks:
-      - eblangelion
     ports:
       - 5432:5432
     volumes:
@@ -48,22 +41,8 @@ services:
       start_period: 30s
       timeout: 10s
 
-
-  pgadmin:
-    container_name: pgadmin4
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: root@mail.xyz
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - 5050:80
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   redis:
     image: redis:latest
-    networks:
-      - eblangelion
     ports:
       - 6379:6379
     volumes:
@@ -74,27 +53,26 @@ services:
       timeout: 5s
       retries: 5
 
-  frontend-build:
+  frontend:
     build:
       context: ./src/frontend/
-      dockerfile: Dockerfile
-    volumes:
-      - frontend-build:/app/dist
+      dockerfile: build/Dockerfile
 
-  nginx:
-    image: nginx:alpine
-    depends_on:
-      frontend-build:
-        condition: service_completed_successfully
-      backend:
-        condition: service_started
-    networks:
-      - eblangelion
-    ports:
-      - 3000:80
+  caddy:
+    build:
+      context: ./proxy/
+      dockerfile: Dockerfile
+    environment:
+      # Uncomment, add the domain and CF token. Voila, you have HTTPS
+      #CADDY_EXTRA_DIRECTIVES: import tls
+      CADDY_DOMAIN:
+      CLOUDFLARE_API_TOKEN: <API_TOKEN_HERE>
     volumes:
-      - frontend-build:/usr/share/nginx/html
-      - ./configurations/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./proxy/conf:/etc/caddy
+      - caddy-data:/data
+    ports:
+      - 80:80
+      - 443:443
 
   rabbitmq:
     container_name: rabbitmq
@@ -105,8 +83,6 @@ services:
       - RABBITMQ_DEFAULT_USER=rmuser
       - RABBITMQ_DEFAULT_PASS=rmpassword
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
-    networks:
-      - eblangelion
     ports:
       - 15672:15672
       - 5672:5672
@@ -117,26 +93,18 @@ services:
       retries: 3
     volumes:
       - rabbitmq-state:/var/lib/rabbitmq
-  minio: 
-    <<: *minio-common 
+  minio:
+    <<: *minio-common
     container_name: minio
-    networks:
-      - eblangelion
     ports:
-      - "9000:9000"  
-      - "9001:9001" 
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio-data:/data
-    
+
 volumes:
   postgres-data:
-  pgadmin-data:
-  redis-data: 
-  frontend-build:
+  redis-data:
+  caddy-data:
   rabbitmq-state:
   minio-data:
-
-networks:
-  eblangelion:
-    name: eblangelion
-    driver: bridge

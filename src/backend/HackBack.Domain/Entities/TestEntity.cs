@@ -80,9 +80,8 @@ public class TestEntity : BaseEntity<Guid>
         {
             existingQuestion.QuestionText = updatedQuestion.QuestionText;
             existingQuestion.Description = updatedQuestion.Description;
-            existingQuestion.Type = updatedQuestion.Type;
+            existingQuestion.QuestType = updatedQuestion.QuestType;
             existingQuestion.Options = updatedQuestion.Options;
-            existingQuestion.AnswerOptions = updatedQuestion.AnswerOptions;
             existingQuestion.CorrectAnswers = updatedQuestion.CorrectAnswers;
             existingQuestion.GeneratedByAi = updatedQuestion.GeneratedByAi;
             ModifiedAt = DateTime.UtcNow;
