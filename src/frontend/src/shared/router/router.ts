@@ -7,6 +7,7 @@ export const routes = {
   signIn: createRoute({ path: '/sign-in' }),
   signUp: createRoute({ path: '/sign-up' }),
   course: createRoute({ path: '/courses/:name' }),
+  testGenerator: createRoute({ path: '/test-generator' })
 };
 
 export const router = createRouter({
@@ -17,5 +18,6 @@ export const router = createRouter({
     routes.signIn,
     routes.signUp,
     routes.course,
+    routes.testGenerator,
   ],
 });

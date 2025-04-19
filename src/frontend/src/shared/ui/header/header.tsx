@@ -23,6 +23,9 @@ export const Header = () => {
               <li>
                 <Link to={routes.about}>Топ учеников</Link>
               </li>
+              <li>
+                <Link to={routes.testGenerator}>Сгенерировать тест</Link>
+              </li>
             </ul>
           </nav>
           <div className={styles.auth}>
