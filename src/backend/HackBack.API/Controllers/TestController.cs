@@ -35,5 +35,13 @@ namespace HackBack.API.Controllers
 
             return result.ToResponse();
         }
+
+        [HttpGet("/{id:guid}")]
+        public async Task<IActionResult> GetTestAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _testService.GetTestAsync(id, cancellationToken);
+
+            return result.ToResponse();
+        }
     }
 }

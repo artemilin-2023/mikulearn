@@ -4,6 +4,7 @@ using HackBack.Contracts.ApiContracts;
 using HackBack.Contracts.RabbitMQContracts;
 using HackBack.Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ResultSharp.Core;
 using ResultSharp.Errors;
@@ -77,5 +78,13 @@ public class TestService(
         _logger.LogInformation("Test generation request successfully created. RequestId: {RequestId}", testGenerationRequest.Id);
 
         return testGenerationRequest.Id;
-    }    
+    }
+
+    public async Task<Result<TestEntity>> GetTestAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _testRepository.AsQuery().SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
+        if (result is null)
+            return Error.NotFound("Test not found");
+        return result;
+    }
 }
