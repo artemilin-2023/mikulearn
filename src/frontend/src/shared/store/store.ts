@@ -1,17 +1,46 @@
 import { makeAutoObservable } from "mobx";
 import { createContext, useContext } from "react";
 
-class Store {
-    something: string = 'something';
+type User = {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+};
 
-	constructor() {
-		makeAutoObservable(this);
+class Store {
+    user: User | null = null;
+	isAuth: boolean = false;
+    token: string | null = null;
+    
+    constructor() {
+		makeAutoObservable(this)
     }
 
-	setSomething(something: string) {
-		this.something = something;
+    setUser(user: User) {
+        this.user = user;
+    }
+
+	setIsAuth(isAuth: boolean) {
+		this.isAuth = isAuth;
 	}
-	
+
+	setToken(token: string) {
+		this.token = token;
+	}
+
+    loadTokenFromStorage() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            this.setToken(token);
+        }
+    }
+
+    saveTokenToStorage() {
+        if (this.token) {
+            localStorage.setItem('token', this.token);
+        }
+    }
 }
 
 export const store = new Store();

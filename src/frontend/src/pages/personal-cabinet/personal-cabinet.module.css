@@ -136,11 +136,6 @@
   font-size: 0.9rem;
 }
 
-/* Main Content Section */
-.mainContent {
-  /* padding: var(--spacing-lg); */
-}
-
 /* Tab Styles */
 :global(.mantine-Tabs-list) {
   border-bottom: 2px solid rgba(103, 232, 249, 0.15);

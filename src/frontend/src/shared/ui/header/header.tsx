@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import styles from './header.module.css';
-import { useUnit } from 'effector-react';
-import { $isAuth } from '@shared/user/user';
+import { store } from '@shared/store/store';
+import { observer } from 'mobx-react-lite';
 
-export const Header = () => {
-  const isAuthenticated = useUnit($isAuth);
+export const Header = observer(() => {
+  const isAuthenticated = store.isAuth;
 
   return (
     <>
@@ -52,4 +52,4 @@ export const Header = () => {
       </header>
     </>
   );
-};
+});

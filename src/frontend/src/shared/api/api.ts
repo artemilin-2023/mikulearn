@@ -1,19 +1,14 @@
 import axios from 'axios';
-import { $token } from '@shared/user';
+import { store } from '@shared/store/store';
 
 export const api = axios.create({
   baseURL: 'https://localhost',
 });
 
-let currentToken: string | null = null;
-
-$token.watch((token) => {
-  currentToken = token;
-});
 
 api.interceptors.request.use((config) => {
-  if (currentToken) {
-    config.headers.Authorization = `Bearer ${currentToken}`;
+  if (store.token) {
+    config.headers.Authorization = `Bearer ${store.token}`;
   }
   return config;
 });
@@ -24,9 +19,7 @@ api.interceptors.response.use((response) => {
   if (authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
     const token = authHeader.substring(7);
     
-    import('@shared/user').then(({ setToken }) => {
-      setToken(token);
-    });
+    store.setToken(token);
   }
   
   return response;

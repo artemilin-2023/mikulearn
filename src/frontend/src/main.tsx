@@ -1,6 +1,4 @@
 import { createRoot } from 'react-dom/client';
-import { fork } from 'effector';
-import { Provider } from 'effector-react';
 import { App } from '@app';
 
 // global styles
@@ -13,12 +11,8 @@ import '@app/styles/transitions.css';
 const root = createRoot(document.getElementById('root')!);
 
 async function render() {
-  const scope = fork();
-
   root.render(
-    <Provider value={scope}>
-      <App />
-    </Provider>
+    <App />
   );
 }
 
