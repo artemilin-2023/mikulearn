@@ -1,5 +1,7 @@
 import { createEffect, sample } from 'effector';
 import { createForm } from '@effector-reform/core';
+import { zodAdapter } from '@effector-reform/zod';
+import { z } from 'zod';
 
 type SignInValues = {
   email: string;
@@ -20,6 +22,12 @@ export const loginForm = createForm<SignInValues>({
     email: '',
     password: '',
   },
+  validation: zodAdapter(
+    z.object({
+      email: z.string().email(),
+      password: z.string().length(8)
+    })
+  )
 });
 
 sample({
