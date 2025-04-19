@@ -25,6 +25,7 @@ services:
       - ConnectionStrings__Rabbit=amqp://rmuser:rmpassword@rabbitmq:5672
       - ConnectionStrings__Redis=redis:6379
       - ConnectionStrings__Postgres=Host=postgres;Database=database;Username=postgres;Password=password
+      - ConnectionStrings__OpenRouter=Host=https://openrouter.ai/api/v1;Api_key=<OPENROUTER_API_KEY>
     depends_on:
       postgres:
         condition: service_healthy

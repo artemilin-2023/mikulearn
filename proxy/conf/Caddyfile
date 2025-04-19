@@ -1,4 +1,4 @@
-(tls) {
+(cloudflare_dns) {
   tls {
     dns cloudflare {env.CLOUDFLARE_API_TOKEN}
   }
@@ -14,7 +14,7 @@
       reverse_proxy backend:8080
     }
     handle {
-      reverse_proxy frontend:{$CADDY_FRONTEND_PORT:3000}
+      reverse_proxy frontend:3000
     }
   }
 }
