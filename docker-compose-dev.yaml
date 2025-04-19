@@ -14,11 +14,11 @@ services:
     build:
       target: dev
     volumes:
-      - ./src/frontend:/app
+      - ./src/frontend/src:/app/src
 
   caddy:
     environment:
-      CADDY_FRONTEND_PORT: 5137
+      CADDY_FRONTEND_PORT: 5173
 
 volumes:
   pgadmin-data:

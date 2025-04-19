@@ -21,7 +21,8 @@ RUN npm run build
 FROM build-deps AS dev
 
 COPY . .
-CMD ["npm", "run", "dev"]
+
+CMD ["npm", "run", "dev", "--", "--host"]
 
 
 FROM nginx:alpine AS deploy
