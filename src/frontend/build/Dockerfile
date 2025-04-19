@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN npm ci --omit=dev
+RUN npm ci
 
 
 FROM build-base AS build-builder
@@ -18,13 +18,7 @@ COPY . .
 RUN npm run build
 
 
-FROM build-base AS dev
-
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-
-RUN npm ci --include=dev
+FROM build-deps AS dev
 
 COPY . .
 CMD ["npm", "run", "dev"]
