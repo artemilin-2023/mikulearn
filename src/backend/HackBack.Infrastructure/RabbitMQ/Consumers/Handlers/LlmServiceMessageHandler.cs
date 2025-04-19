@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using HackBack.Contracts.RabbitMQContracts;
 using HackBack.Infrastructure.Models;
 using HackBack.Infrastructure.RabbitMQ.Consumers.Abstractions;
 using MediatR;

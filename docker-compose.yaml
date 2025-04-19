@@ -130,6 +130,13 @@ services:
       - TASK_ROUTING_KEY=llm.tasks
       - RESPONSE_ROUTING_KEY=llm.response
       - EXCHANGE_NAME=llm.services
+      - OPENROUTER_API_URL=https://openrouter.ai/api/v1
+      - OPENROUTER_API_KEY=<TOKEN_HERE>
+      - OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=NhxVLpgxyCfXqjVIY793
+      - MINIO_SECRET_KEY=mnzS4hSaMYqR94QmC7ZlJtxIdhUi02Rz2yCUbQfU
+      - MINIO_BUCKET_NAME=huipetrovich
     restart: on-failure
 
 volumes:

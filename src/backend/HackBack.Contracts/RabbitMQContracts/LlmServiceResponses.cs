@@ -27,7 +27,7 @@ public class ResultLlmResponse :
     IRequest<Result>
 {
     [JsonPropertyName("TestEntity")]
-    public required TestEntity TestEntity { get; init; }
+    public required List<QuestionEntity> QuestionEntity { get; init; }
 }
 
 public class TestGenerationStatusConverter : JsonConverter<TestGenerationStatus>
