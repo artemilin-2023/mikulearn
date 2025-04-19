@@ -12,7 +12,7 @@ import { routes } from '@shared/router';
 
 export const HomePage = () => {
 	const [scrolled, setScrolled] = useState(false);
-
+	
 	useEffect(() => {
 		const handleScroll = () => {
 			setScrolled(window.scrollY > 50);
