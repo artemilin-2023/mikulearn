@@ -1,45 +1,35 @@
 import { useUnit } from 'effector-react';
-import { TextInput, Button } from '@mantine/core';
-
-import {
-	$email,
-	$password,
-	emailChanged,
-	passwordChanged,
-	formSubmitted,
-	loginFx,
-} from '@features/auth-service/auth.service';
+import { TextInput, Button, PasswordInput } from '@mantine/core';
+import { loginForm, loginFx } from './model';
+import { useForm } from '@effector-reform/react';
 
 export const SignInPage = () => {
-	const [email, password, onEmailChange, onPasswordChange, onSubmit, pending] =
-		useUnit([
-			$email,
-			$password,
-			emailChanged,
-			passwordChanged,
-			formSubmitted,
-			loginFx.pending,
-		]);
+  const { fields, onSubmit } = useForm(loginForm);
+  const { pending } = useUnit({ pending: loginFx.pending });
 
-	return (
-		<div>
-			<TextInput
-				label="Email"
-				placeholder="your@email.com"
-				value={email}
-				onChange={(e) => onEmailChange(e.currentTarget.value)}
-			/>
-			<TextInput
-				label="Password"
-				placeholder="password"
-				type="password"
-				value={password}
-				onChange={(e) => onPasswordChange(e.currentTarget.value)}
-			/>
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <TextInput
+          label="Email"
+          placeholder="your@email.com"
+          type="email"
+          value={fields.email.value}
+          onChange={(e) => fields.email.onChange(e.currentTarget.value)}
+        />
 
-			<Button color="blue" mt="md" onClick={onSubmit} loading={pending}>
-				Войти
-			</Button>
-		</div>
-	);
+        <PasswordInput
+          label="Password"
+          placeholder="password"
+          type="password"
+          value={fields.password.value}
+          onChange={(e) => fields.password.onChange(e.currentTarget.value)}
+        />
+
+        <Button color="blue" mt="md" type="submit" loading={pending}>
+          Войти
+        </Button>
+      </form>
+    </div>
+  );
 };
