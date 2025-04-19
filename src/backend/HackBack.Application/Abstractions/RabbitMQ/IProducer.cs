@@ -9,7 +9,7 @@ namespace HackBack.Application.Abstractions.RabbitMQ
         /// </summary>
         /// <param name="message"></param>
         /// <returns>Резульат выполнения операции.</returns>
-        Task<Result> ProduceAsync(TMessage message, string Exchange, string RoutingKey, CancellationToken cancellationToken);
+        Task<Result> ProduceAsync(TMessage message, CancellationToken cancellationToken);
     }
 
 }

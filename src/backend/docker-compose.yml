@@ -1,0 +1,19 @@
+services:
+  hackback.api:
+    image: ${DOCKER_REGISTRY-}hackbackapi
+    build:
+      context: .
+      dockerfile: HackBack.API/Dockerfile
+    networks:
+    - eblangelion
+    ports:
+    - 7090:8080
+    - 7091:8081
+ 
+
+networks:
+  eblangelion:
+    name: eblangelion
+    driver: bridge
+    external: true
+  

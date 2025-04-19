@@ -1,14 +1,16 @@
 ﻿using HackBack.Application.Abstractions.Services;
 using HackBack.Application.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HackBack.Application.ServiceRegistration
 {
     public static class ServiceRegistrator
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddServices();
+            services.AddServices()
+                .LoadConfiguratoins(configuration);
 
             return services;
         }
@@ -18,7 +20,15 @@ namespace HackBack.Application.ServiceRegistration
             services.AddScoped<IAuthService, AuthService>()
                 .AddScoped<IAccountService, AccountService>()
                 .AddScoped<IPermissionService, PermissionService>()
-                .AddScoped<ITestService, TestService>();
+                .AddScoped<IFileService, FileService>()
+                .AddScoped<ITestService, TestService>()
+                .AddScoped<ILlmService, LlmService>();   
+
+            return services;
+        }
+
+        private static IServiceCollection LoadConfiguratoins(this IServiceCollection services, IConfiguration configuration)
+        {
 
             return services;
         }

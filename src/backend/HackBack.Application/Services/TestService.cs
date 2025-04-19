@@ -1,102 +1,81 @@
 ﻿using HackBack.Application.Abstractions.Data;
 using HackBack.Application.Abstractions.Services;
 using HackBack.Contracts.ApiContracts;
+using HackBack.Contracts.RabbitMQContracts;
 using HackBack.Domain.Entities;
-using HackBack.Domain.Enums;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ResultSharp.Core;
 using ResultSharp.Errors;
+using ResultSharp.Logging;
 
 namespace HackBack.Application.Services;
 
-public class TestService(IRepository<TestEntity, Guid>  testRepository, IAuthService authService) : ITestService
+public class TestService(
+    IRepository<TestEntity, Guid> testRepository,
+    IRepository<TestGenerationRequestEntity, Guid> requestRepository,
+    IAuthService authService,
+    IFileService fileService,
+    ILlmService llmService,
+    ILogger<TestService> logger
+) : 
+    ITestService
 {
     private readonly IRepository<TestEntity, Guid> _testRepository = testRepository;
+    private readonly IRepository<TestGenerationRequestEntity, Guid> _requestRepository = requestRepository;
     private readonly IAuthService _authService = authService;
+    private readonly IFileService _fileService = fileService;
+    private readonly ILlmService _llmService = llmService;
+    private readonly ILogger<TestService> _logger = logger;
 
-    public async Task<Result<TestEntity>> CreateTestAsync(
-        string title, 
-        string description, 
-        TestAccess access, 
-        HttpRequest request, 
-        CancellationToken cancellationToken, 
-        IEnumerable<QuestionEntity>? questions)
+    public async Task<Result<Guid>> CreateCustomTestAsync(CustomTestRequest request, HttpRequest httpRequest, CancellationToken cancellationToken)
     {
-        Result<Guid> currentUserId = _authService.GetUserIdFromAccessToken(request);
+        
+        var userId = _authService.GetUserIdFromHttpRequest(httpRequest);
 
-        // Вот главный минус всех Result библиотек - невозможность глобально перехватить результат операции. Приходится везде пихать эти проверки, что как-бы не оч. :<
-        if (!currentUserId.IsSuccess)
-        {
-            return Result<TestEntity>.Failure(currentUserId.Errors);
-        }
+        TestEntity test = TestEntity.Initialize(
+            request.Title, 
+            request.Description, 
+            request.Access,
+            createBy: userId, 
+            questions: request.Questions.Select(
+                q => QuestionEntity
+                .Initialize(
+                    questionText: q.QuestionText,
+                    description: q.Description,
+                    type: q.Type,
+                    options: q.Options,
+                    answerOptions: q.AnswerOptions,
+                    correctAnswers: q.CorrectAnswers,
+                    generatedByAi: false)).ToList());
 
-        TestEntity test = new TestEntity(Guid.NewGuid(), title, description, access, currentUserId);
-        if (questions != null)
-        {
-            test.AddQuestions(questions);
-        }
-        return await _testRepository.AddAsync(test, cancellationToken);
+        await _testRepository.AddAsync(test, cancellationToken);
+
+        return test.Id;
     }
 
-    public async Task<Result<TestEntity>> AddQuestionAsync(Guid testId, QuestionEntity question, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> GenerateTestAsync(GenerateTestRequest requestDto, HttpRequest httpRequest, CancellationToken cancellationToken)
     {
-        var result = await Result.TryAsync(async () =>
-        {
-            var test = await _testRepository.AsQuery()
-                .Include(t => t.Questions)
-                .FirstOrDefaultAsync(t => t.Id == testId, cancellationToken);
-            ArgumentNullException.ThrowIfNull(test);
-            test.AddQuestion(question);
-            return await _testRepository.UpdateAsync(test, cancellationToken);
-        }, ex => Error.Failure(ex.Message));
+        _logger.LogInformation("Starting test generation process for file: {FileName}", requestDto.File.FileName);
 
-        return result;
-    }
+        var uploadedFileName = await _fileService.UploadFileAsync(requestDto.File, cancellationToken);
+        if (uploadedFileName.IsFailure)
+            return Error.Failure("Failed to upload file");
 
-    public async Task<Result<TestEntity>> RemoveQuestionAsync(Guid testId, Guid questionId, CancellationToken cancellationToken)
-    {
-        var result = await Result.TryAsync(async () =>
-        {
-            var test = await _testRepository.AsQuery().Include(t => t.Questions).FirstOrDefaultAsync(q => q.Id == testId, cancellationToken);
-            ArgumentNullException.ThrowIfNull(test);
-            test.RemoveQuestion(questionId);
-            return await _testRepository.UpdateAsync(test, cancellationToken);
-        }, ex => Error.Failure(ex.Message));
+        var userId = _authService.GetUserIdFromHttpRequest(httpRequest);
+        if (userId.IsFailure)
+            return Error.Failure("Failed to retrieve user information");
 
-        return result;        
-    }
-    
-    public async Task<Result<TestEntity>> GetAsync(Guid testId, CancellationToken cancellationToken)
-    {
-        var result = await Result.TryAsync(async () =>
-        {
-            var test = await _testRepository.AsQuery().Include(t => t.Questions).FirstOrDefaultAsync(t => t.Id == testId, cancellationToken);
-            ArgumentNullException.ThrowIfNull(test);
-            return test;
-        }, ex => Error.Failure(ex.Message));
-        return result;
-    }
+        var testGenerationRequest = TestGenerationRequestEntity.CreateNew(userId, uploadedFileName);
+        var llmRequest = new LlmTestGenerationRequest(testGenerationRequest.Id, requestDto.Description, uploadedFileName);
 
-    public async Task<Result<IEnumerable<TestEntity>>> GetAllTestsAsync(CancellationToken cancellationToken)
-    {
-        var allTests = await _testRepository.AsQuery().ToListAsync(cancellationToken);
-        return Result<IEnumerable<TestEntity>>.Success(allTests);
-    }
+        var llmResult = await _llmService.SendTestGenerationRequest(llmRequest, cancellationToken);
+        if (llmResult.IsFailure)
+            return Error.Failure("Failed to initiate test generation");
 
-    public async Task<Result<TestEntity>> UpdateQuestionAsync(Guid testId, QuestionEntity updatedQuestion, CancellationToken cancellationToken)
-    {
-        var result = await Result.TryAsync(async () =>
-        {
-            var test = await _testRepository.AsQuery()
-                .Include(t => t.Questions)
-                .FirstOrDefaultAsync(t => t.Id == testId, cancellationToken);
-            ArgumentNullException.ThrowIfNull(test);
-            test.UpdateQuestion(updatedQuestion);
-            await _testRepository.UpdateAsync(test, cancellationToken);
-            return test;
-        }, ex => Error.Failure(ex.Message));
+        await _requestRepository.AddAsync(testGenerationRequest, cancellationToken);
+        _logger.LogInformation("Test generation request successfully created. RequestId: {RequestId}", testGenerationRequest.Id);
 
-        return result;
-    }
+        return testGenerationRequest.Id;
+    }    
 }

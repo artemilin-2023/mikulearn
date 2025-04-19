@@ -1,23 +1,26 @@
 ﻿using HackBack.Domain.Enums;
+using System.Collections;
 
 namespace HackBack.Domain.Entities;
 
 public class TestEntity : BaseEntity<Guid>
 {
-    public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
-    public TestAccess Access { get; set; } = TestAccess.Private;
+    public string Title { get; private set; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
+    public DateTime CreatedAt { get; private set; }
+    public DateTime ModifiedAt { get; private set; }
+    public TestAccess Access { get; private set; } = TestAccess.Private;
     public Guid CreatedBy { get; set; }
-    public List<QuestionEntity> Questions { get; set; } = new List<QuestionEntity>();
+    public IReadOnlyList<QuestionEntity> Questions { get; private set; } = [];
+
+    private readonly List<QuestionEntity> _questions = [];
 
     public TestEntity()
     {
-        // Конструктор для ef
+        Questions = _questions.AsReadOnly();
     }
 
-    public TestEntity(Guid id, string title, string description, TestAccess access, Guid createdBy)
+    private TestEntity(Guid id, string title, string description, TestAccess access, Guid createdBy) : base()
     {
         Id = id;
         Title = title;
@@ -28,9 +31,20 @@ public class TestEntity : BaseEntity<Guid>
         ModifiedAt = DateTime.UtcNow;
     }
 
+    public static TestEntity Initialize(
+        string title, string description, TestAccess access, Guid createBy, IEnumerable<QuestionEntity>? questions = null)
+    {
+        TestEntity entity = new(Guid.NewGuid(), title, description, access, createBy);
+        if (questions != null)
+        {
+            entity.AddQuestions(questions);
+        }
+        return entity;
+    }
+
     public void AddQuestions(IEnumerable<QuestionEntity> question)
     {
-        Questions.AddRange(question);
+        _questions.AddRange(question);
     }
 
     public void AddQuestion(QuestionEntity question)
@@ -40,7 +54,7 @@ public class TestEntity : BaseEntity<Guid>
             throw new ArgumentNullException(nameof(question));
         }
 
-        Questions.Add(question);
+        _questions.Add(question);
         ModifiedAt = DateTime.UtcNow;
     }
 
@@ -49,7 +63,7 @@ public class TestEntity : BaseEntity<Guid>
         var question = Questions.FirstOrDefault(q => q.Id == questionId);
         if (question != null)
         {
-            Questions.Remove(question);
+            _questions.Remove(question);
             ModifiedAt = DateTime.UtcNow;
         }
     }

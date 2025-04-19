@@ -1,7 +1,6 @@
 ﻿using HackBack.Infrastructure.RabbitMQ.Consumers.Abstractions;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using ResultSharp;
 using ResultSharp.Core;
 using ResultSharp.Errors;
 using ResultSharp.Extensions.FunctionalExtensions.Async;
@@ -9,26 +8,23 @@ using ResultSharp.Logging;
 
 namespace HackBack.Infrastructure.RabbitMQ.Abstractions
 {
-    internal enum ClientType
-    {
-        Consumer,
-        Producer
-    }
-
-    internal class RabbitClientBuilder(IConnection connection, ILogger<RabbitClientBuilder> logger)
+    public class RabbitClientBuilder(IConnection connection, ILogger<RabbitClientBuilder> logger)
     {
         private readonly IConnection connection = connection;
         private readonly ILogger<RabbitClientBuilder> logger = logger;
 
+        // :o
         private readonly (
             List<Func<IChannel, Task<Result>>> queueDeclarations,
             List<Func<IChannel, Task<Result>>> exchangeDeclarations,
             List<Func<IChannel, Task<Result>>> bindDeclarations
-            ) declarations = new();
-        
+        ) declarations = ([], [], []);
+
         private ILoggerFactory? loggerFactory;
         private IHandler? handler;
         private ClientType clientType = ClientType.Producer;
+        private object? clientInstance;
+        private object locker = new();
 
         /// <summary>
         /// Декларирует очередь.
@@ -64,7 +60,7 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
         /// <param name="durable">Будет ли обменник сохраняться при следующем запуске RMQ.</param>
         /// <param name="autoDelete">Будет ли удален обменник после отсоединения всех очередией.</param>
         /// <param name="arguments">Дополнительные аргументы.</param>
-        internal RabbitClientBuilder WithExchange(string exchangeName = "", string exchangeType = ExchangeType.Direct, bool durable = true, bool autoDelete = false, IDictionary<string, object?>? arguments = null)
+        internal RabbitClientBuilder WithExchange(string exchangeName, string exchangeType = ExchangeType.Direct, bool durable = true, bool autoDelete = false, IDictionary<string, object?>? arguments = null)
         {
             declarations.exchangeDeclarations.Add(async (channel) =>
             {
@@ -92,7 +88,7 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
         /// <param name="exchangeName">Имя обменника.</param>
         /// <param name="routingKey">Ключ маршрутизации.</param>
         /// <param name="arguments">Дополнительные аргументы.</param>
-        internal RabbitClientBuilder BindQueue(string queueName = "", string exchangeName = "", string routingKey = "", IDictionary<string, object?>? arguments = null)
+        internal RabbitClientBuilder BindQueue(string queueName, string exchangeName, string routingKey, IDictionary<string, object?>? arguments = null)
         {
             declarations.bindDeclarations.Add(async (channel) =>
             {
@@ -127,17 +123,49 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
             return this;
         }
 
+        /// <summary>
+        /// Задает тип rabbitmq клиента.
+        /// </summary>
+        /// <param name="type">Тип клиента <see cref="ClientType"/></param>
         internal RabbitClientBuilder WithType(ClientType type)
         {
             clientType = type;
             return this;
         }
 
+        /// <summary>
+        /// Устанавливает обработчик для сообщений из очереди. Метод применяется если клиент типа <see cref="ClientType.Consumer"/>.
+        /// </summary>
+        /// <param name="handler">Обработчик сообщения.</param>
         internal RabbitClientBuilder WithHandler(IHandler handler)
         {
             ArgumentNullException.ThrowIfNull(handler, nameof(handler));
             this.handler = handler;
             return this;
+        }
+
+        /// <summary>
+        /// Асинхронно создает или получает экземпляр RabbitMQ клиента. Если клиент уже создан, то он будет возвращен.
+        /// </summary>
+        /// <typeparam name="TClient">Тип требуемого клиента. Тип должен являться насследником <see cref="RabbitClientBase"/>.</typeparam>
+        /// <returns>Экземпляр клиента для RabbitMQ.</returns>
+        internal async Task<Result<TClient>> GetOrBuildAsync<TClient>()
+            where TClient : RabbitClientBase
+        {
+            if (clientInstance is TClient client)
+                return client;
+
+            return await BuildAsync<TClient>()
+                .OnSuccessAsync(client =>
+                {
+                    lock (locker)
+                    {
+                        if (clientInstance is not null)
+                            logger.LogWarning("Client instance was already created and set during the build process. Skipping reinitialization.");
+
+                        clientInstance ??= client;
+                    }
+                });
         }
 
         /// <summary>
@@ -158,9 +186,11 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
 
         private async Task<Result<IChannel>> GetChannelAsync()
         {
-            var channel = await connection.CreateChannelAsync();
+            var channel = await Result.TryAsync(
+                () => connection.CreateChannelAsync()
+            );
 
-            return channel is not null ? Result<IChannel>.Success(channel) : Error.Failure();
+            return channel;
         }
 
         private async Task<Result<IChannel>> ApplyDeclaratoinsForChannel(IChannel channel)
@@ -176,7 +206,7 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
                 Result.MergeAsync(
                     declarations.bindDeclarations.Select(d => d(channel)).ToArray()
                 )
-            ).ThenAsync(() => Result<IChannel>.Success(channel)); // возвращаем исходынй канал если результат декларации успешен
+            ).ThenAsync(() => Result.Success(channel)); // возвращаем исходынй канал если результат декларации успешен
         }
 
         private Result<TClient> BuildClient<TClient>(IChannel channel, ILoggerFactory loggerFactory)
@@ -185,7 +215,7 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
             {
                 ClientType.Consumer => CreateConsumer<TClient>(channel, loggerFactory),
                 ClientType.Producer => CreateProducer<TClient>(channel, loggerFactory),
-                _ => Error.Failure($"An unexpected type of client. The type of client must be {nameof(ClientType.Consumer)} or {nameof(ClientType.Consumer)}")
+                _ => Error.Failure($"An unexpected type of client. The type of client must be {nameof(ClientType.Consumer)} or {nameof(ClientType.Producer)}")
             };
         }
 
@@ -201,7 +231,7 @@ namespace HackBack.Infrastructure.RabbitMQ.Abstractions
             return (TClient)client!;
         }
 
-        private Result<TClient> CreateProducer<TClient>(IChannel channel, ILoggerFactory loggerFactory)
+        private static Result<TClient> CreateProducer<TClient>(IChannel channel, ILoggerFactory loggerFactory)
         {
             var client = Activator.CreateInstance(typeof(TClient), channel, loggerFactory);
             if (client is null)

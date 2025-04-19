@@ -1,5 +1,4 @@
-﻿using HackBack.Application.Abstractions.RabbitMQ;
-using HackBack.Infrastructure.RabbitMQ.Abstractions;
+﻿using HackBack.Infrastructure.RabbitMQ.Abstractions;
 using HackBack.Infrastructure.RabbitMQ.Consumers.Abstractions;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -10,8 +9,7 @@ using ResultSharp.Errors;
 namespace HackBack.Infrastructure.RabbitMQ.Consumers
 {
     public class Consumer(IChannel channel, IHandler handler, ILoggerFactory loggerFactory) :
-        RabbitClientBase(channel, loggerFactory),
-        IConsumer
+        RabbitClientBase(channel, loggerFactory)
     {
         private readonly IHandler handler = handler;
         private readonly ILogger<Consumer> logger = loggerFactory.CreateLogger<Consumer>();

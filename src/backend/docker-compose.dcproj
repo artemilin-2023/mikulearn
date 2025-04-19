@@ -7,11 +7,9 @@
     <ProjectGuid>81dded9d-158b-e303-5f62-77a2896d2a5a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/graphql</DockerServiceUrl>
-    <DockerServiceName>backend</DockerServiceName>
-    <DockerComposeBaseFilePath>..\..\docker-compose</DockerComposeBaseFilePath>
   </PropertyGroup>
   <ItemGroup>
-	<None Include="..\..\docker-compose.yaml" />
+    <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
 </Project>
