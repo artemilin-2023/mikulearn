@@ -1,72 +1,105 @@
-import { useEffect } from 'react'
-import { useUnit } from 'effector-react';
 import { TextInput, Button, PasswordInput, Group, Anchor, Text, SegmentedControl } from '@mantine/core';
-import { signUpForm, signUpFx } from './model';
-import { useForm } from '@effector-reform/react';
-import { AuthForm } from '../../shared/ui/auth-form';
-import { Link } from '@argon-router/react';
-import { routes } from '@shared/router';
+import { AuthForm } from '@shared/ui/auth-form';
+import { Link } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const signUpSchema = z.object({
+  email: z.string().email({ message: 'Введите корректный email' }),
+  username: z.string().min(2, { message: 'Имя должно содержать минимум 2 символа' }),
+  password: z.string().min(6, { message: 'Пароль должен содержать минимум 6 символов' }),
+  role: z.number().min(1, { message: 'Выберите роль' })
+});
+
+type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export const SignUpPage = () => {
-  const { fields, onSubmit, errors } = useForm(signUpForm);
-  const { pending } = useUnit({ pending: signUpFx.pending });
-  
-  useEffect(() => { 
-    fields.email.onChange("test@gmail.com")
-    fields.password.onChange("123qwe")
-    fields.username.onChange("test")
-  },[])
+  const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: '',
+      username: '',
+      password: '',
+      role: 2
+    }
+  });
+
+  const onSubmit = (data: SignUpFormData) => {
+    console.log(data);
+  };
 
   return (
     <AuthForm
-      title="Создайте аккаунт"
-      description="Заполните форму, чтобы зарегистрироваться"
-      onSubmit={(e) => onSubmit(e as React.FormEvent<HTMLFormElement>)}
+      title="Регистрация"
+      onSubmit={handleSubmit(onSubmit)}
       footer={
         <Group justify="space-between" mt="md">
           <Text size="sm">
             Уже есть аккаунт?{' '}
             <Anchor fw={500}>
-              <Link to={routes.signIn}>Войти</Link>
+              <Link to="/sign-in">Войти</Link>
             </Anchor>
           </Text>
         </Group>
       }
     >
-      <TextInput
-        label="Email"
-        placeholder="your@email.com"
-        required
-        type="email"
-        value={fields.email.value}
-        onChange={(e) => fields.email.onChange(e.currentTarget.value)}
-        error={errors.email}
+      <Controller
+        name="email"
+        control={control}
+        render={({ field }) => (
+          <TextInput
+            label="Email"
+            placeholder="your@email.com"
+            required
+            type="email"
+            error={errors.email?.message}
+            {...field}
+          />
+        )}
       />
       
-      <TextInput
-        label="Полное имя"
-        placeholder="Иванов Иван Иванович"
-        required
-        value={fields.username.value}
-        onChange={(e) => fields.username.onChange(e.currentTarget.value)}
+      <Controller
+        name="username"
+        control={control}
+        render={({ field }) => (
+          <TextInput
+            label="Полное имя"
+            placeholder="Иванов Иван Иванович"
+            required
+            error={errors.username?.message}
+            {...field}
+          />
+        )}
       />
 
-      <PasswordInput
-        label="Пароль"
-        placeholder="Ваш пароль"
-        required
-        value={fields.password.value}
-        onChange={(e) => fields.password.onChange(e.currentTarget.value)}
-        error={errors.password}
+      <Controller
+        name="password"
+        control={control}
+        render={({ field }) => (
+          <PasswordInput
+            label="Пароль"
+            placeholder="Ваш пароль"
+            required
+            error={errors.password?.message}
+            {...field}
+          />
+        )}
       />
 
-      <SegmentedControl
-        data={[
-          { value: '2', label: 'Я студент' },
-          { value: '3', label: 'Я преподаватель' }
-        ]}
-        value={fields.role.value.toString()}
-        onChange={(value) => fields.role.onChange(Number(value))}
+      <Controller
+        name="role"
+        control={control}
+        render={({ field }) => (
+          <SegmentedControl
+            data={[
+              { value: '2', label: 'Я студент' },
+              { value: '3', label: 'Я преподаватель' }
+            ]}
+            value={field.value.toString()}
+            onChange={(value) => field.onChange(parseInt(value))}
+          />
+        )}
       />
 
       <Button 
@@ -74,7 +107,6 @@ export const SignUpPage = () => {
         color=' var(--gradient-primary-secondary-light)' 
         mt="xs" 
         type="submit" 
-        loading={pending}
         styles={{ 
           label: { 
             color: 'black' 

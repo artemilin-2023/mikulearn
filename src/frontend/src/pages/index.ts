@@ -1,12 +1,6 @@
-import { createRoutesView } from '@argon-router/react';
-import { HomePageRoute } from './home';
-import { DashboardPageRoute } from './dashboard';
-import { NotFoundPage } from './not-found';
-import { SignInPageRoute } from './sign-in';
-import { SignUpPageRoute } from './sign-up';
-import { PersonalCabinetPageRoute } from './personal-cabinet';
-	
-export const RoutesView = createRoutesView({
-	routes: [HomePageRoute, DashboardPageRoute, SignInPageRoute, SignUpPageRoute, PersonalCabinetPageRoute],
-	otherwise: NotFoundPage,
-});
+export * from './home/home-page';
+export * from './dashboard/dashboard-page';
+export * from './not-found/not-found-page';
+export * from './sign-in/sign-in-page';
+export * from './sign-up/sign-up-page';
+export * from './personal-cabinet/personal-cabinet-page';
