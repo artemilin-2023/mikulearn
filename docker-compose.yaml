@@ -18,6 +18,9 @@ services:
     build:
       context: src/backend
       dockerfile: Dockerfile
+    environment:
+      # Change to Release if needed
+      - ASPNETCORE_ENVIRONMENT=Debug
     depends_on:
       postgres:
         condition: service_healthy
