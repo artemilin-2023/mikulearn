@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackBack.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250401134054_editQuestionEntity")]
-    partial class editQuestionEntity
+    [Migration("20250419125315_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,10 +71,6 @@ namespace HackBack.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string[]>("AnswerOptions")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.Property<string[]>("CorrectAnswers")
                         .IsRequired()
                         .HasColumnType("text[]");
@@ -93,15 +89,15 @@ namespace HackBack.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<int>("QuestType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("TestId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -240,6 +236,32 @@ namespace HackBack.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("HackBack.Domain.Entities.TestGenerationRequestEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.ToTable("TestGenerationRequestEntity");
                 });
 
             modelBuilder.Entity("HackBack.Domain.Entities.UserEntity", b =>
