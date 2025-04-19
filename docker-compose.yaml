@@ -18,8 +18,6 @@ services:
     build:
       context: src/backend
       dockerfile: Dockerfile
-    networks:
-      - eblangelion
     depends_on:
       postgres:
         condition: service_healthy
@@ -32,8 +30,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=database
-    networks:
-      - eblangelion
     ports:
       - 5432:5432
     volumes:
@@ -47,8 +43,6 @@ services:
 
   redis:
     image: redis:latest
-    networks:
-      - eblangelion
     ports:
       - 6379:6379
     volumes:
@@ -86,8 +80,6 @@ services:
       - RABBITMQ_DEFAULT_USER=rmuser
       - RABBITMQ_DEFAULT_PASS=rmpassword
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
-    networks:
-      - eblangelion
     ports:
       - 15672:15672
       - 5672:5672
@@ -101,8 +93,6 @@ services:
   minio:
     <<: *minio-common
     container_name: minio
-    networks:
-      - eblangelion
     ports:
       - "9000:9000"
       - "9001:9001"
