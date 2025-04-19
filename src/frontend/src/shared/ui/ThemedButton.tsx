@@ -1,29 +1,30 @@
-import { Button, ButtonProps } from '@mantine/core';
-import { getThemeColor, getThemeSpacing, createThemeStyle } from './mantine.helpers';
+import { Button, ButtonProps, MantineTheme } from '@mantine/core';
+import { getThemeColor } from './mantine.helpers';
 
 /**
  * Styled Button that uses the project's theme variables
  */
 export const ThemedButton = (props: ButtonProps) => {
-  const buttonStyles = createThemeStyle({
-    root: {
+  // Define properly typed button styles
+  const buttonStyles = {
+    root: (theme: MantineTheme) => ({
       borderRadius: 'var(--radius-md)',
       transition: 'var(--transition-normal)',
-    },
-    filled: {
+    }),
+    filled: (theme: MantineTheme) => ({
       backgroundColor: getThemeColor('primary'),
       '&:hover': {
         backgroundColor: getThemeColor('primary') + 'dd', // Adding transparency for hover state
       }
-    },
-    outline: {
+    }),
+    outline: (theme: MantineTheme) => ({
       borderColor: getThemeColor('primary'),
       color: getThemeColor('primary'),
       '&:hover': {
         backgroundColor: getThemeColor('primary') + '15', // Very light background on hover
       }
-    }
-  });
+    })
+  };
 
   return <Button styles={buttonStyles} {...props} />;
 };

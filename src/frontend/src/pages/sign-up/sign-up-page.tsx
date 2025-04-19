@@ -1,5 +1,4 @@
 import { Button, TextInput } from '@mantine/core';
-import { useUnit } from 'effector-react';
 
 export const SignUpPage = () => {
 
