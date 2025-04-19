@@ -2,9 +2,10 @@
 
 namespace HackBack.API.Habs
 {
-    public class TestGenerationStatusHub(ILogger<TestGenerationStatusHub> logger) : Hub 
+    public class TestGenerationHub
+        (ILogger<TestGenerationHub> logger) : Hub 
     {
-        private readonly ILogger<TestGenerationStatusHub> _logger = logger;
+        private readonly ILogger<TestGenerationHub> _logger = logger;
 
         /// <summary>
         /// Подписывается на обновление статуса генерации теста по его id.

@@ -56,9 +56,10 @@ namespace HackBack.Infrastructure.RabbitMQ.Consumers.Handlers
 
         private async Task<Result> HandleResultMessageAsync(string payload, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-            //var message = Deserialize<ResultLlmServiceResponse>(payload)
-            //    .Then(msg => _mediarot.Send(msg))
+            var message = await Deserialize<ResultLlmServiceResponse>(payload)
+                .ThenAsync(msg => _mediarot.Send(msg.Body, cancellationToken));
+
+            return message;
         }
     }
 }
