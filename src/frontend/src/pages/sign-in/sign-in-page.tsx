@@ -4,7 +4,7 @@ import { loginForm, loginFx } from './model';
 import { useForm } from '@effector-reform/react';
 
 export const SignInPage = () => {
-  const { fields, onSubmit } = useForm(loginForm);
+  const { fields, onSubmit, errors } = useForm(loginForm);
   const { pending } = useUnit({ pending: loginFx.pending });
 
   return (
@@ -26,6 +26,9 @@ export const SignInPage = () => {
           onChange={(e) => fields.password.onChange(e.currentTarget.value)}
         />
 
+        {errors.email} 
+        {errors.password} 
+        
         <Button color="blue" mt="md" type="submit" loading={pending}>
           Войти
         </Button>
