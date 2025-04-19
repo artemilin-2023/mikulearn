@@ -44,7 +44,18 @@ export const SignInPage = () => {
         error={errors.password}
       />
 
-      <Button fullWidth color=' var(--gradient-primary-secondary-light)' mt="xl" type="submit" loading={pending}>
+      <Button 
+        fullWidth 
+        color=' var(--gradient-primary-secondary-light)' 
+        mt="xs" 
+        type="submit" 
+        loading={pending}
+        styles={{ 
+          label: { 
+            color: 'black' 
+          } 
+        }}
+      >
         Войти
       </Button>
     </AuthForm>

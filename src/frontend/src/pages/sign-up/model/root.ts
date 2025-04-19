@@ -3,6 +3,7 @@ import { zodAdapter } from '@effector-reform/zod';
 import { createForm } from '@effector-reform/core';
 import { z } from 'zod';
 import { api } from '@shared/api/api';
+import { login } from '@shared/user';
 
 type SignUpValues = {
   email: string;
@@ -17,8 +18,19 @@ export const signUpFx = createEffect<SignUpValues, { success: true }>(
     console.log('Username:', username);
     console.log('Password:', password);
     console.log('Role:', role);
+    
     const response = await api.post('/api/account/register', { email, username, password, role });
     console.log('Response:', response);
+    
+    if (response.data && response.data.id) {
+      login({
+        id: response.data.id,
+        email: response.data.email || email,
+        name: response.data.name || username,
+        role: response.data.role || String(role),
+      });
+    }
+    
     return { success: true };
   }
 );
