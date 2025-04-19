@@ -1,7 +1,0 @@
-ebangelion.y7o4ka.xyz {
-  tls {
-    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-  }
-  reverse_proxy /api/* backend:8080
-  reverses_proxy frontend:3000
-}

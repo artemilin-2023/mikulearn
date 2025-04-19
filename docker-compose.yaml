@@ -63,9 +63,12 @@ services:
       context: ./proxy/
       dockerfile: Dockerfile
     environment:
+      # Uncomment, add the domain and CF token. Voila, you have HTTPS
+      #CADDY_EXTRA_DIRECTIVES: import tls
+      CADDY_DOMAIN:
       CLOUDFLARE_API_TOKEN: <API_TOKEN_HERE>
     volumes:
-      - ./conf:/etc/caddy
+      - ./proxy/conf:/etc/caddy
       - caddy-data:/data
     ports:
       - 80:80
