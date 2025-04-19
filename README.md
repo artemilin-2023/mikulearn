@@ -7,8 +7,8 @@
 The project can be run in `docker` using `docker compose`
 
 1. `docker-compose.yaml` contains the definitions of all used services. An example production configuration is provided in `docker-compose-prod.yaml.example` as an override to highlight the required changes needed for the first build
-  - `docker compose up -d --build` to run the project on `localhost`
-  - `docker compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d --build`
+  - ```docker compose up -d --build``` to run the project on `localhost`
+  - ```docker compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d --build```
 
 ## Project architecture
 
@@ -34,7 +34,7 @@ The backend is a C# [ASP.NET](https://learn.microsoft.com/ru-ru/aspnet/core) app
 
 There is a `docker-compose-dev.yaml` made as an override specifically for development purposes. It allows hot-reload of frontend code as well as adds management utilities like `rabbitmq-management` and `pgadmin`. You can use it with the following command:
 
-`docker compose -f docker-compose.yaml -f docker-compose-dev.yaml down --remove-orphans && docker compose -f docker-compose.yaml -f docker-compose-dev.yaml up -d --build`
+```docker compose -f docker-compose.yaml -f docker-compose-dev.yaml down --remove-orphans && docker compose -f docker-compose.yaml -f docker-compose-dev.yaml up -d --build```
 
 ## Credits
 
