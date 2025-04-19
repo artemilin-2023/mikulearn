@@ -17,5 +17,9 @@ services:
     volumes:
       - ./src/frontend:/app
 
+  caddy:
+    environment:
+      CADDY_FRONTEND_PORT: 5137
+
 volumes:
   pgadmin-data:
