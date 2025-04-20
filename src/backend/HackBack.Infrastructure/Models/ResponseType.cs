@@ -3,6 +3,7 @@
     internal enum ResponseType
     {
         Status,
-        Result
+        Result,
+        Recommendation
     }
 }

@@ -13,6 +13,11 @@ from minio import Minio
 from minio.error import S3Error
 import io
 
+#
+# ДА, ЭТО ОЧЕНЬ ПЛОХОЙ КОД, Я ЗНАЮ, НО ЗАТО БЫСТРО
+#
+
+
 load_dotenv()
 
 logging.basicConfig(
@@ -30,6 +35,7 @@ class TestGenerationStatus(str, Enum):
 class ResponseType(IntEnum):
     STATUS = 0
     RESULT = 1
+    RECOMMENDATION = 2
 
 RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://rmuser:rmpassword@rabbitmq:5672")
 TASK_QUEUE_NAME = os.getenv("TASK_QUEUE_NAME", "task_queue")
@@ -73,18 +79,15 @@ class LlmService:
                 self.connection = pika.BlockingConnection(parameters)
                 self.channel = self.connection.channel()
                 
-                # Объявление exchange
                 self.channel.exchange_declare(
                     exchange=EXCHANGE_NAME,
                     exchange_type='direct',
                     durable=True
                 )
                 
-                # Объявление очередей
                 self.channel.queue_declare(queue=TASK_QUEUE_NAME, durable=True)
                 self.channel.queue_declare(queue=RESPONSE_QUEUE_NAME, durable=True)
                 
-                # Привязка очередей к exchange
                 self.channel.queue_bind(
                     exchange=EXCHANGE_NAME,
                     queue=TASK_QUEUE_NAME,
@@ -256,6 +259,34 @@ class LlmService:
             logger.error(f"Ошибка при отправке результата: {e}")
             raise
 
+    def send_recommendation(self, request_id: str, test_result_id: str, recommendation: str):
+        """Отправка рекомендации в очередь ответов"""
+        try:
+            recommendation_response = {
+                "Type": int(ResponseType.RECOMMENDATION),
+                "Body": {
+                    "TestResultId": test_result_id,
+                    "Recommendation": recommendation
+                }
+            }
+            
+            json_message = json.dumps(recommendation_response)
+            logger.debug(f"Отправляемое JSON сообщение (рекомендация): {json_message}")
+            
+            self.channel.basic_publish(
+                exchange=EXCHANGE_NAME,
+                routing_key=RESPONSE_ROUTING_KEY,
+                body=json_message.encode('utf-8'),
+                properties=pika.BasicProperties(
+                    delivery_mode=2,
+                    content_type='application/json'
+                )
+            )
+            logger.info(f"Отправлена рекомендация для запроса {request_id}")
+        except Exception as e:
+            logger.error(f"Ошибка при отправке рекомендации: {e}")
+            raise
+
     def generate_test(self, request_id: str, test_description: str, file_name: str) -> Dict:
         """
         Генерация теста с помощью LLM на основе описания.
@@ -281,7 +312,6 @@ class LlmService:
                 logger.error(f"Ошибка: не получены данные от LLM для запроса {request_id}")
                 raise Exception("Не удалось получить ответ от модели LLM")
   
-            # Создаем строковое представление текущей даты и времени
             created_at = datetime.now().isoformat()
             questions = self._parse_llm_response_to_questions(test_content, created_at)
             
@@ -380,7 +410,7 @@ class LlmService:
                 f"{OPENROUTER_API_URL}/chat/completions",
                 headers=headers,
                 json=data,
-                timeout=120  # Увеличиваем таймаут для получения полного ответа
+                timeout=120
             )
             
             logger.debug(f"Получен ответ от API: Статус {response.status_code}")
@@ -469,27 +499,20 @@ class LlmService:
         Пытается восстановить неполный JSON-ответ от LLM.
         """
         try:
-            # Проверяем, можно ли распарсить как есть
             json.loads(json_str)
             return json_str
         except json.JSONDecodeError as e:
             logger.warning(f"Получен неполный JSON, пытаемся восстановить: {e}")
             
-            # Удаляем все после последней закрывающей скобки "}"
             try:
-                # Находим последнюю правильную позицию JSON
                 parsed_length = e.pos
                 
-                # Проверяем, достаточно ли данных для восстановления
-                if parsed_length < 10:  # слишком мало данных для восстановления
+                if parsed_length < 10:
                     raise ValueError("Недостаточно данных для восстановления JSON")
                 
-                # Обрабатываем случай, когда не хватает закрывающей скобки
                 if "Expecting ',' delimiter" in str(e) or "Expecting property name" in str(e):
-                    # Находим последний полный объект
                     last_valid_brace = json_str.rfind('}', 0, parsed_length)
                     if last_valid_brace > 0:
-                        # Восстанавливаем JSON, добавляя закрывающие скобки по необходимости
                         open_braces = json_str[:last_valid_brace+1].count('{')
                         close_braces = json_str[:last_valid_brace+1].count('}')
                         missing_braces = open_braces - close_braces
@@ -499,8 +522,6 @@ class LlmService:
                             logger.info(f"JSON восстановлен, добавлено закрывающих скобок: {missing_braces}")
                             return fixed_json
                 
-                # Другой подход - найти последний полный вопрос и восстановить структуру
-                # Разбираем JSON до последнего правильного вопроса
                 try:
                     json_obj = json.loads(json_str[:parsed_length] + ']}')
                     if "questions" in json_obj and len(json_obj["questions"]) > 0:
@@ -509,15 +530,12 @@ class LlmService:
                 except:
                     pass
                 
-                # Если не удалось восстановить, создаем базовую структуру из того, что есть
                 try:
-                    # Ищем все объекты вопросов
                     import re
                     question_pattern = r'\{\s*"question_text"\s*:.*?"correct_answers"\s*:\s*\[.*?\]\s*\}'
                     questions = re.findall(question_pattern, json_str, re.DOTALL)
                     
                     if questions:
-                        # Создаем новый правильный JSON с найденными вопросами
                         reconstructed = {"questions": []}
                         for q in questions:
                             try:
@@ -535,37 +553,105 @@ class LlmService:
             except Exception as inner_e:
                 logger.error(f"Ошибка при попытке восстановления JSON: {inner_e}")
             
-            # Если все попытки восстановления не удались
             raise ValueError(f"Не удалось восстановить неполный JSON: {e}")
+
+    def generate_recommendation(self, request_id: str, test_result_id: str, incorrect_answers: List[str], question_contexts: List[Dict]) -> str:
+        """
+        Генерация персональной рекомендации на основе результатов теста с помощью LLM.
+        Использует модель OpenRouter API для генерации рекомендации.
+        """
+        try:
+            logger.info(f"Генерация рекомендации для запроса {request_id}, тест ID: {test_result_id}")
+            
+            prompt = self._create_recommendation_prompt(incorrect_answers, question_contexts)
+            
+            recommendation_content = self._call_openrouter_api(prompt)
+            
+            if not recommendation_content:
+                logger.error(f"Ошибка: не получены данные от LLM для запроса {request_id}")
+                raise Exception("Не удалось получить ответ от модели LLM")
+  
+            return recommendation_content
+        except Exception as e:
+            logger.error(f"Ошибка при генерации рекомендации: {e}")
+            raise
+    
+    def _create_recommendation_prompt(self, incorrect_answers: List[str], question_contexts: List[Dict]) -> str:
+        """
+        Формирует промпт для запроса к LLM на основе неправильных ответов и контекста вопросов.
+        """
+        context_str = ""
+        for i, context in enumerate(question_contexts):
+            options_str = ", ".join(context.get("QuestionAnswers", []))
+            context_str += f"\nВопрос {i+1}: {context.get('QuestionText', '')}\n"
+            context_str += f"Описание: {context.get('QuestionDescription', '')}\n"
+            context_str += f"Варианты ответов: {options_str}\n"
+
+        incorrect_answers_str = ", ".join(incorrect_answers)
+        
+        return f"""
+        Проанализируй результаты теста пользователя и сформируй персональную рекомендацию.
+        
+        Контекст вопросов:
+        {context_str}
+        
+        Неправильные ответы пользователя:
+        {incorrect_answers_str}
+        
+        На основе этих данных:
+        1. Определи основные пробелы в знаниях пользователя
+        2. Предложи конкретные рекомендации для изучения (материалы, ресурсы)
+        3. Составь краткий план обучения для восполнения пробелов
+        4. Рекомендуй дополнительные тесты или задания для закрепления знаний
+        
+        Сформируй подробную и полезную рекомендацию, которая поможет пользователю улучшить свои знания.
+        Рекомендация должна быть структурирована, содержать конкретные шаги и быть написана на русском языке.
+        """
 
     def process_message(self, ch, method, properties, body):
         """Обработка входящего сообщения из очереди задач"""
         try:
             message = json.loads(body.decode('utf-8'))
             request_id = message.get("RequestId")
-            test_description = message.get("TestDescription")
-            file_name = message.get("FileName")
             
-            logger.info(f"Получено сообщение: RequestId={request_id}, TestDescription={test_description}")
-            
-            self.send_status_update(request_id, TestGenerationStatus.IN_PROGRESS)
-            
-            try:
-                test_entity = self.generate_test(request_id, test_description, file_name)
+            if "TestDescription" in message:
+                test_description = message.get("TestDescription")
+                file_name = message.get("FileName")
                 
-                self.send_test_result(request_id, test_entity)
+                logger.info(f"Получено сообщение для генерации теста: RequestId={request_id}, TestDescription={test_description}")
                 
-                self.send_status_update(request_id, TestGenerationStatus.SUCCEEDED)
-            except Exception as test_e:
-                logger.error(f"Ошибка при генерации теста: {test_e}")
-                self.send_status_update(request_id, TestGenerationStatus.FAILED)
-                raise
+                self.send_status_update(request_id, TestGenerationStatus.IN_PROGRESS)
+                
+                try:
+                    test_entity = self.generate_test(request_id, test_description, file_name)
+                    
+                    self.send_test_result(request_id, test_entity)
+                    
+                    self.send_status_update(request_id, TestGenerationStatus.SUCCEEDED)
+                except Exception as test_e:
+                    logger.error(f"Ошибка при генерации теста: {test_e}")
+                    self.send_status_update(request_id, TestGenerationStatus.FAILED)
+                    raise
+                
+            elif "UserIncorrectAnswers" in message:
+                test_result_id = message.get("TestResultId")
+                incorrect_answers = message.get("UserIncorrectAnswers", [])
+                contexts = message.get("Context", [])
+                
+                logger.info(f"Получено сообщение для генерации рекомендации: RequestId={request_id}, TestResultId={test_result_id}")
+                
+                try:
+                    recommendation = self.generate_recommendation(request_id, test_result_id, incorrect_answers, contexts)
+                    
+                    self.send_recommendation(request_id, test_result_id, recommendation)
+                    
+                except Exception as rec_e:
+                    logger.error(f"Ошибка при генерации рекомендации: {rec_e}")
+                    raise
             
             ch.basic_ack(delivery_tag=method.delivery_tag)
         except Exception as e:
             logger.error(f"Ошибка при обработке сообщения: {e}")
-            if 'request_id' in locals():
-                self.send_status_update(request_id, TestGenerationStatus.FAILED)
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def start_consuming(self):

@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackBack.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class asfeeeee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,7 +50,10 @@ namespace HackBack.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
                     FileName = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
+                    TestAccess = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -139,6 +142,34 @@ namespace HackBack.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TestSessionEntity",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    StartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FinishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TestId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestSessionEntity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestSessionEntity_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TestSessionEntity_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoleEntity",
                 columns: table => new
                 {
@@ -196,8 +227,10 @@ namespace HackBack.Infrastructure.Migrations
                     { 2, 2 },
                     { 3, 2 },
                     { 4, 2 },
+                    { 1, 3 },
                     { 2, 3 },
-                    { 3, 3 }
+                    { 3, 3 },
+                    { 4, 3 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -214,6 +247,16 @@ namespace HackBack.Infrastructure.Migrations
                 name: "IX_TestGenerationRequestEntity_CreatedBy",
                 table: "TestGenerationRequestEntity",
                 column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestSessionEntity_TestId",
+                table: "TestSessionEntity",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestSessionEntity_UserId",
+                table: "TestSessionEntity",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoleEntity_RoleId",
@@ -240,13 +283,16 @@ namespace HackBack.Infrastructure.Migrations
                 name: "TestGenerationRequestEntity");
 
             migrationBuilder.DropTable(
+                name: "TestSessionEntity");
+
+            migrationBuilder.DropTable(
                 name: "UserRoleEntity");
 
             migrationBuilder.DropTable(
-                name: "Tests");
+                name: "PermissionEntity");
 
             migrationBuilder.DropTable(
-                name: "PermissionEntity");
+                name: "Tests");
 
             migrationBuilder.DropTable(
                 name: "Roles");

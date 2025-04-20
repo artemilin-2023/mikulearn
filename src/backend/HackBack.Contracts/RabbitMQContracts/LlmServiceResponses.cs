@@ -30,6 +30,15 @@ public class ResultLlmResponse :
     public required List<QuestionEntity> QuestionEntity { get; init; }
 }
 
+public class LlmRecommendation :
+    ResponseBase,
+    IRequest<Result>
+{
+    [JsonPropertyName("Recommendation")]
+    public Guid TestResultId { get; init; }
+    public required string Recommendation { get; init; }
+}
+
 public class TestGenerationStatusConverter : JsonConverter<TestGenerationStatus>
 {
     public override TestGenerationStatus Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

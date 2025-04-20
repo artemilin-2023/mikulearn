@@ -3,10 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace HackBack.Infrastructure.Models
 {
-    internal class StatusLlmServiceResponse
+    internal record StatusLlmServiceResponse : LlmServiceResponseBase
     {
-        [JsonPropertyName("Type")]
-        public virtual ResponseType Type { get; set; }
         
         [JsonPropertyName("Body")]
         public required LlmStatusResponse Body { get; init; }
