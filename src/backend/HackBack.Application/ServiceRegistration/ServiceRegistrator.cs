@@ -1,4 +1,5 @@
-﻿using HackBack.Application.Abstractions.Services;
+﻿using System.Reflection;
+using HackBack.Application.Abstractions.Services;
 using HackBack.Application.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +11,8 @@ namespace HackBack.Application.ServiceRegistration
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddServices()
-                .LoadConfiguratoins(configuration);
+                .LoadConfiguratoins(configuration)
+                .AddMediatR(options => options.RegisterServicesFromAssembly(typeof(ServiceRegistrator).Assembly));
 
             return services;
         }

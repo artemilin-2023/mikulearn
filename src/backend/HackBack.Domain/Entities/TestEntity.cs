@@ -1,23 +1,49 @@
 ﻿using HackBack.Domain.Enums;
 using System.Collections;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace HackBack.Domain.Entities;
 
 public class TestEntity : BaseEntity<Guid>
 {
-    public string Title { get; private set; } = string.Empty;
-    public string Description { get; private set; } = string.Empty;
-    public DateTime CreatedAt { get; private set; }
-    public DateTime ModifiedAt { get; private set; }
-    public TestAccess Access { get; private set; } = TestAccess.Private;
+    [JsonPropertyName("Title")]
+    public string Title { get; set; } = string.Empty;
+    
+    [JsonPropertyName("Description")]
+    public string Description { get; set; } = string.Empty;
+    
+    [JsonPropertyName("CreatedAt")]
+    public DateTime CreatedAt { get; set; }
+    
+    [JsonPropertyName("ModifiedAt")]
+    public DateTime ModifiedAt { get; set; }
+    
+    [JsonPropertyName("Access")]
+    [JsonConverter(typeof(TestAccessConverter))]
+    public TestAccess Access { get; set; } = TestAccess.Private;
+    
+    [JsonPropertyName("CreatedBy")]
     public Guid CreatedBy { get; set; }
-    public IReadOnlyList<QuestionEntity> Questions { get; private set; } = [];
+    
+    [JsonPropertyName("Questions")]
+    public IReadOnlyList<QuestionEntity> Questions 
+    { 
+        get => _questions.AsReadOnly();
+        set 
+        {
+            _questions.Clear();
+            if (value != null)
+            {
+                _questions.AddRange(value);
+            }
+        }
+    }
 
     private readonly List<QuestionEntity> _questions = [];
 
     public TestEntity()
     {
-        Questions = _questions.AsReadOnly();
     }
 
     private TestEntity(Guid id, string title, string description, TestAccess access, Guid createdBy) : base()
@@ -86,5 +112,38 @@ public class TestEntity : BaseEntity<Guid>
             existingQuestion.GeneratedByAi = updatedQuestion.GeneratedByAi;
             ModifiedAt = DateTime.UtcNow;
         }
+    }
+}
+
+public class TestAccessConverter : JsonConverter<TestAccess>
+{
+    public override TestAccess Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            string access = reader.GetString() ?? string.Empty;
+            return access switch
+            {
+                "Private" => TestAccess.Private,
+                "Public" => TestAccess.Public,
+                _ => throw new JsonException($"Cannot convert {access} to TestAccess")
+            };
+        }
+        
+        if (reader.TokenType == JsonTokenType.Number)
+        {
+            int accessValue = reader.GetInt32();
+            if (Enum.IsDefined(typeof(TestAccess), accessValue))
+            {
+                return (TestAccess)accessValue;
+            }
+        }
+        
+        throw new JsonException("Expected string or number value for TestAccess");
+    }
+
+    public override void Write(Utf8JsonWriter writer, TestAccess value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString());
     }
 }
