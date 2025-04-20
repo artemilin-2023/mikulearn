@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using SignalRSwaggerGen.Attributes;
 
-namespace HackBack.API.Habs
+namespace HackBack.API.Hubs
 {
+    [SignalRHub]
     public class TestGenerationHub
-        (ILogger<TestGenerationHub> logger) : Hub 
+        (ILogger<TestGenerationHub> logger) : Hub
     {
         private readonly ILogger<TestGenerationHub> _logger = logger;
 

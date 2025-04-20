@@ -1,4 +1,4 @@
-﻿using HackBack.API.Habs;
+﻿using HackBack.API.Hubs;
 using HackBack.API.ServiceRegistration.Options;
 using HackBack.Common;
 using Microsoft.AspNetCore.SignalR;

@@ -1,4 +1,5 @@
 ﻿using HackBack.Application.Services;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace HackBack.API.Extensions
@@ -9,6 +10,7 @@ namespace HackBack.API.Extensions
         {
             services.AddSwaggerGen(c =>
             {
+                c.AddSignalRSwaggerGen();
                 c.AddSecurityDefinition("AccessToken", new OpenApiSecurityScheme
                 {
                     Description = "Access token using the Bearer scheme.\r\n" +

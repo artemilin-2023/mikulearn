@@ -1,4 +1,4 @@
-﻿using HackBack.API.Habs;
+﻿using HackBack.API.Hubs;
 using HackBack.Application.Abstractions.Realtime;
 using HackBack.Contracts.ApiContracts;
 using HackBack.Domain.Enums;
