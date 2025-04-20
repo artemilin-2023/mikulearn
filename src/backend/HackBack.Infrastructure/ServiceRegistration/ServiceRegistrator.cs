@@ -161,7 +161,7 @@ public static class ServiceRegistrator
 
         services.Configure<MinIoOptions>(options =>
         {
-            options.BucketName = (string)builder["bucket"];
+            options.BucketName = (string)builder["bucketname"];
         });
 
         IMinioClient minioClient = new MinioClient()
