@@ -19,7 +19,7 @@ export const Sidebar = () => {
                     <FiUser className={styles.titleIcon} /> Личный кабинет
                 </Title>
                 
-                <div className={styles.spacer} />
+                {/* <div className={styles.spacer} /> */}
                 
                 <Button 
                     variant="outline" 

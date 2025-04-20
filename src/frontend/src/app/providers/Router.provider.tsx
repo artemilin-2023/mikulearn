@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { MainLayout } from '@shared/layouts';
 import { HomePage } from '@pages/home/home-page';
-import { DashboardPage } from '@pages/dashboard/dashboard-page';
 import { SignInPage } from '@pages/sign-in/sign-in-page';
 import { SignUpPage } from '@pages/sign-up/sign-up-page';
 import { PersonalCabinetPage } from '@pages/personal-cabinet/personal-cabinet-page';
@@ -12,6 +11,7 @@ import { Loader } from '@mantine/core';
 import AuthService from '@shared/services/AuthService/AuthService';
 
 import { User } from '@shared/services/AuthService/AuthService';
+import { TestPage } from '@pages/test/test-page';
 
 
 const Layout = () => {
@@ -130,7 +130,6 @@ export const RouterProvider = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
           
           {/* Guest-only routes */}
           <Route path="/sign-in" element={
@@ -150,6 +149,12 @@ export const RouterProvider = () => {
               <PersonalCabinetPage />
             </ProtectedRoute>
           } />
+          <Route path="/test" element={
+            <ProtectedRoute>
+              <TestPage />
+            </ProtectedRoute>
+          } />
+          
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
