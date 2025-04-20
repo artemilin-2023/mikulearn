@@ -89,7 +89,7 @@ export const HomePage = () => {
                 </div>
             </section> */}
 
-			<section className={`${styles.featuredCourses} animate-on-scroll`}>
+			{/* <section className={`${styles.featuredCourses} animate-on-scroll`}>
 				<h2 className={styles.sectionTitle}>Популярные курсы</h2>
 				<div className={styles.courseGrid}>
 					<div className={`${styles.courseCard} animate-on-scroll`}>
@@ -141,7 +141,7 @@ export const HomePage = () => {
 						</div>
 					</div>
 				</div>
-			</section>
+			</section> */}
 		</div>
 	);
 };

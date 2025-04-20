@@ -184,4 +184,10 @@
 
 .fade-in {
   animation: fadeIn 0.3s ease forwards;
+}
+
+input[type="radio"]:focus,
+.quiz-button:focus,
+input[type="checkbox"]:focus {
+  outline: none;
 } 

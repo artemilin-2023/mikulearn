@@ -1,17 +1,22 @@
 .indexPage {
   overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 100px);
   background-color: var(--background-color);
 }
 
 .hero {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-xxl);
   padding: var(--spacing-xxl) 0;
   position: relative;
   transition: all 0.5s ease;
   background-color: var(--background-color);
 }
+
 
 .scrolled {
   padding-top: var(--spacing-lg);
