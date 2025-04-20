@@ -34,11 +34,6 @@ export const Sidebar = observer(() => {
           .then(() => console.log('Subscribed to status updates for:', store.test_guid))
           .catch(error => console.error('Failed to subscribe to status updates:', error));
       }
-      
-      SignalRService.sendMessage({
-        sender: 'client',
-        content: store.test_guid,
-      });
     }
   }, [store.test_guid, status.isConnected])
 
