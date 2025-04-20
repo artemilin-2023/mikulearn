@@ -22,7 +22,7 @@ FROM build-deps AS dev
 
 COPY . .
 
-CMD ["npm", "run", "dev", "--", "--host", "--port 3000"]
+CMD ["npm", "run", "dev", "--", "--host", "--port", "3000"]
 
 
 FROM nginx:alpine AS deploy
