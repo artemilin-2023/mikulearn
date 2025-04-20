@@ -21,7 +21,12 @@ var app = builder.Build();
 // мне лень делать по нормальному
 using var scope = app.Services.CreateScope();
 var db = scope.ServiceProvider.GetRequiredService<DbContext>();
-await db.Database.MigrateAsync();
+var pendingMigrations = await db.Database.GetPendingMigrationsAsync();
+
+if (pendingMigrations.Any())
+{
+    await db.Database.MigrateAsync();
+}
 
 app.UseResultSharpLogging();
 
