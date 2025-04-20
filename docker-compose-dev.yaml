@@ -1,6 +1,5 @@
 services:
   pgadmin:
-    container_name: pgadmin4
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: root@mail.xyz
@@ -9,6 +8,17 @@ services:
       - 5050:80
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+
+
+  frontend:
+    build:
+      target: dev
+    volumes:
+      - ./src/frontend/src:/app/src
+
+  caddy:
+    environment:
+      CADDY_FRONTEND_PORT: 5173
 
 volumes:
   pgadmin-data:

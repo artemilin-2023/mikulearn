@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-inline: 0 !important;
+    gap: var(--spacing-lg);
+}
+
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.contentCard {
+    background-color: var(--color-background);
+    transition: var(--transition-normal);
+
+    --paper-shadow: none;
+}
+
+.uploadSection {
+    background-color: var(--color-surface);
+    transition: var(--transition-normal);
+}
+
+.userInfo {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+}

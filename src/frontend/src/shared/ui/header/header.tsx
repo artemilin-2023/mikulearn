@@ -1,41 +1,57 @@
-import { Link } from '@argon-router/react';
+import { Link } from 'react-router-dom';
 import styles from './header.module.css';
-import { routes } from '@shared/router';
+import { store } from '@shared/store/store';
+import { observer } from 'mobx-react-lite';
 
-export const Header = () => {
+export const Header = observer(() => {
+  const isAuthenticated = store.isAuth;
+
   return (
     <>
       <header className={styles.Header}>
         <div className={styles.container}>
           <div className={styles.logo}>
-            <Link to={routes.home} className={styles.logoLink}>
+            <Link to="/" className={styles.logoLink}>
               MikuLearn
             </Link>
           </div>
-          <nav className={styles.navigation}>
+
+          {/* это я буду делать только за деньги */}
+          {/* <nav className={styles.navigation}>
             <ul>
               <li>
-                <Link to={routes.home}>Главная</Link>
+                <Link to="/">Главная</Link>
               </li>
               <li>
-                <Link to={routes.dashboard}>Мои курсы</Link>
+                <Link to="/dashboard">Мои курсы</Link>
               </li>
               <li>
-                <Link to={routes.about}>Топ учеников</Link>
+                <Link to="/404">Топ учеников</Link>
               </li>
             </ul>
-          </nav>
+          </nav> */}
           <div className={styles.auth}>
-            <Link to={routes.signIn} className={styles.loginButton}>
-              Вход
-            </Link>
+            {
+              isAuthenticated ? (
+                <Link to="/personal-cabinet" className={styles.personalCabinetButton}>
+                  Личный кабинет
+                </Link>
+              ) : (
+                <>
+                  <Link to="/sign-in" className={styles.loginButton}>
+                    Вход
+                  </Link>
 
-            <Link to={routes.signUp} className={styles.registerButton}>
-              Регистрация
-            </Link>
+                  <Link to="/sign-up" className={styles.registerButton}>
+                    Регистрация
+                  </Link>
+                </>
+              )
+            }
+
           </div>
         </div>
       </header>
     </>
   );
-};
+});

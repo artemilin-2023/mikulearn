@@ -7,12 +7,11 @@ import {
 } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import styles from './home-page.module.css';
-import { Link } from '@argon-router/react';
-import { routes } from '@shared/router';
+import { Link } from 'react-router-dom';
 
 export const HomePage = () => {
 	const [scrolled, setScrolled] = useState(false);
-
+	
 	useEffect(() => {
 		const handleScroll = () => {
 			setScrolled(window.scrollY > 50);
@@ -39,7 +38,7 @@ export const HomePage = () => {
 						подходом
 					</p>
 					<div className={styles.cta}>
-						<Link to={routes.signUp} className={styles.primaryButton}>
+						<Link to="/sign-up" className={styles.primaryButton}>
 							Начать обучение <FaArrowRight className={styles.buttonIcon} />
 						</Link>
 					</div>
@@ -102,8 +101,7 @@ export const HomePage = () => {
 							<h3>Основы Python</h3>
 							<p>Изучите основы программирования на Python с нуля</p>
 							<Link
-								to={routes.course}
-								params={{ name: 'python' }}
+								to="/course"
 								className={styles.courseLink}
 							>
 								Подробнее <FaArrowRight />
@@ -119,8 +117,7 @@ export const HomePage = () => {
 							<h3>UI/UX Дизайн</h3>
 							<p>Создавайте привлекательные и удобные интерфейсы</p>
 							<Link
-								to={routes.course}
-								params={{ name: 'uiux' }}
+								to="/course"
 								className={styles.courseLink}
 							>
 								Подробнее <FaArrowRight />
@@ -136,8 +133,7 @@ export const HomePage = () => {
 							<h3>Анализ данных</h3>
 							<p>Научитесь анализировать данные и принимать решения</p>
 							<Link
-								to={routes.course}
-								params={{ name: 'data' }}
+								to="/course"
 								className={styles.courseLink}
 							>
 								Подробнее <FaArrowRight />
