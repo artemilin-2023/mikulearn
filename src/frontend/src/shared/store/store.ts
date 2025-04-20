@@ -10,6 +10,7 @@ class Store {
   isAuth: boolean = false;
   token: string | null = null;
   initialized: boolean = false;
+  test_guid: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -65,6 +66,10 @@ class Store {
     this.isAuth = false;
     this.token = null;
     localStorage.removeItem('token');
+  }
+
+  setTestGuid(testGuid: string) {
+    this.test_guid = testGuid;
   }
 }
 

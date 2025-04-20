@@ -19,6 +19,10 @@ export const Sidebar = () => {
     navigate('/sign-in');
   };
 
+  const setupConnection = () => {
+
+  };
+
   return (
     <Paper shadow="sm" radius="md" p="lg" withBorder className={styles.sidebar}>
       <Stack gap="lg">
@@ -28,6 +32,10 @@ export const Sidebar = () => {
                 
         {/* <div className={styles.spacer} /> */}
                 
+        <Button onClick={setupConnection}>
+            Подключиться
+        </Button>
+                
         <Button 
           variant="outline" 
           color="red" 
@@ -35,7 +43,7 @@ export const Sidebar = () => {
           leftSection={<FiLogOut size="1rem" />}
           fullWidth
         >
-                    Выйти
+            Выйти
         </Button>
       </Stack>
     </Paper>
