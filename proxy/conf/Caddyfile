@@ -1,24 +1,27 @@
 (cloudflare_dns) {
-  tls {
-    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-  }
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	}
 }
 
 {$CADDY_CERT_DOMAIN:localhost} {
-  {$CADDY_EXTRA_DIRECTIVES}
+	{$CADDY_EXTRA_DIRECTIVES}
 
-  @host host {$CADDY_HOST:*}
-  handle @host {
-    handle /api/* {
-      uri /api/swagger/* strip_prefix /api
-      reverse_proxy backend:8080
-    }
-    handle {
-      reverse_proxy frontend:3000
-    }
-    handle /s3/* {
-      uri strip_prefix /s3
-      reverse_proxy minio:9000
-    }
-  }
+	@host host {$CADDY_HOST:*} *.{$CADDY_HOST:*}
+	handle @host {
+		handle /api/* {
+			uri /api/swagger/* strip_prefix /api
+			reverse_proxy backend:8080
+		}
+		handle host s3.{$CADDY_HOST:*} {
+			uri strip_prefix /s3
+			reverse_proxy minio:9000
+		}
+		handle {
+			reverse_proxy frontend:3000
+		}
+	}
+	handle {
+		abort
+	}
 }

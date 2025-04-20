@@ -156,7 +156,7 @@ public static class ServiceRegistrator
         var minioConfiguration = configuration.GetAndSaveConfiguration<MinIoOptions>(services);
 
         IMinioClient minioClient = new MinioClient()
-            .WithEndpoint(minioConfiguration.Endpoint)
+            .WithEndpoint(configuration.GetConnectionString("MinIO"))
             .WithCredentials(minioConfiguration.AccessKey, minioConfiguration.SecretKey)
             .WithSSL(false)
             .Build();
