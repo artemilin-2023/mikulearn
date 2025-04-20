@@ -68,7 +68,7 @@ namespace HackBack.Application.Services
                 });
             }
 
-            result.CorrectAnswerPercentage = (double)correctAnswers / test.Questions.Count * 100;
+            result.CorrectAnswerPercentage = Math.Round((double)correctAnswers / test.Questions.Count * 100, 2);
         }
-        }
+    }
     }
