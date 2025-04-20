@@ -4,10 +4,10 @@ FROM build-base AS build-deps
 
 WORKDIR /app
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
-  --mount=type=cache,target=/root/.npm \
-  npm ci --omit=dev
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
 
 FROM build-base AS build-builder
 
@@ -17,17 +17,13 @@ COPY --from=build-deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-FROM build-base AS dev
 
-WORKDIR /app
+FROM build-deps AS dev
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
-  --mount=type=cache,target=/root/.npm \
-  npm ci --include=dev
-USER node
 COPY . .
-CMD ["npm", "run", "dev"]
+
+CMD ["npm", "run", "dev", "--", "--host"]
+
 
 FROM nginx:alpine AS deploy
 

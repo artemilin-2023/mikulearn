@@ -17,7 +17,7 @@ namespace HackBack.API.Controllers
         /// Создание кастомного теста
         /// </summary>
         [PermissionRequired([Permission.Create])]
-        [HttpPost("/custom")]
+        [HttpPost("custom")]
         public async Task<IActionResult> CreateCustomTest(CustomTestRequest request,
             CancellationToken cancellationToken)
         {
@@ -30,7 +30,7 @@ namespace HackBack.API.Controllers
         /// Запрос на НАЧАЛО генерации теста
         /// </summary>
         [PermissionRequired([Permission.Create])]
-        [HttpPost("/generate")]
+        [HttpPost("generate")]
         public async Task<IActionResult> GenerateTestAsync([FromForm] GenerateTestRequest request,
             CancellationToken cancellationToken)
         {
@@ -40,7 +40,7 @@ namespace HackBack.API.Controllers
         }
 
         [PermissionRequired([Permission.Read])]
-        [HttpGet("/{id:guid}")]
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetTestAsync(Guid id, CancellationToken cancellationToken)
         {
             var result = await _testService.GetTestAsync(id, cancellationToken);

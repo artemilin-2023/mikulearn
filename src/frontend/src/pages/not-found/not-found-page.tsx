@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './not-found-page.module.css';
-import { Link } from '@argon-router/react';
-import { routes } from '@shared/router';
+import { Link } from 'react-router-dom';
 import { MainLayout } from '@shared/layouts';
 
 export const NotFoundPage = () => {
@@ -37,7 +36,7 @@ export const NotFoundPage = () => {
             <h2>Страница не найдена</h2>
             <p>Упс! Кажется, вы заблудились в цифровом пространстве.</p>
           </div>
-          <Link to={routes.home} className={styles.homeButton}>
+          <Link to="/" className={styles.homeButton}>
             Вернуться на главную
           </Link>
 

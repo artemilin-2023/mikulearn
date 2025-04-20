@@ -1,5 +1,4 @@
 ﻿using HackBack.Application.Abstractions.Services;
-using HackBack.Application.Services;
 using HackBack.Contracts.ApiContracts;
 using Microsoft.AspNetCore.Mvc;
 using ResultSharp.HttpResult;
@@ -20,7 +19,7 @@ public class TestSessionController(ITestSessionService testSessionService)
     }
 
 
-    [HttpPost("/{sessionId:guid}/finish")]
+    [HttpPost("{sessionId:guid}/finish")]
     public async Task<IActionResult> FinishTest(Guid sessionId, [FromBody] IEnumerable<AnswersRequest> answers,
         CancellationToken cancellationToken)
     {

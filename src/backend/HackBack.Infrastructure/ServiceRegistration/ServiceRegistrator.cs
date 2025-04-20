@@ -36,22 +36,11 @@ public static class ServiceRegistrator
             .AddRepositories()
             .AddRabbitMqAsync(configuration))
             .AddMinIo(configuration)
-            .LoadMediatr(configuration)
             .AddHostedServices();
 
         return services;
     }
-
-    private static IServiceCollection LoadMediatr(this IServiceCollection services, IConfiguration configuration)
-    {
-
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblyContaining<LlmServiceMessageHandler>(); 
-        });
-
-        return services;
-    }   
+    
     private static IServiceCollection LoadOptions(this IServiceCollection services, IConfiguration configuration)
     {
         configuration.GetAndSaveConfiguration<PasswordManagerOptions>();
@@ -139,6 +128,7 @@ public static class ServiceRegistrator
     private static IServiceCollection AddRabbitMqProducers(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IProducer<LlmTestGenerationRequest>, LlmProducer>();
+        services.AddScoped<IProducer<GenerateRecommendationRequest>, LlmProducer>();
 
         return services;
     }

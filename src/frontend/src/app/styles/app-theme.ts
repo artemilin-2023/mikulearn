@@ -70,10 +70,47 @@ export const theme = createTheme({
                 },
             },
         },
+        AppShell: {
+            styles: {
+                root: {
+                    backgroundColor: 'var(--background-color)',
+                    color: 'var(--color-text)',
+                }
+            }
+        },
+        Paper: {
+            styles: {
+                root: {
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text)',
+                    borderColor: 'var(--color-border)',
+                }
+            }
+        },
+        Card: {
+            styles: {
+                root: {
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text)',
+                    borderColor: 'var(--color-border)',
+                }
+            }
+        },
+        Input: {
+            styles: {
+                input: {
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text)',
+                    borderColor: 'var(--color-border)',
+                    '&::placeholder': {
+                        color: 'var(--color-text-light)',
+                    },
+                }
+            }
+        },
     },
 })
 
-// Add keyframes for gradient animation
 if (typeof document !== 'undefined') {
     const styleElement = document.createElement('style');
     styleElement.textContent = `
@@ -81,6 +118,14 @@ if (typeof document !== 'undefined') {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        :root {
+            --gradient-primary-secondary-light: linear-gradient(45deg, var(--mantine-color-primary-5), var(--mantine-color-secondary-5));
+        }
+        
+        .dark-theme, html[data-mantine-color-scheme="dark"] {
+            --gradient-primary-secondary-light: linear-gradient(45deg, var(--mantine-color-primary-6), var(--mantine-color-secondary-6));
         }
     `;
     document.head.appendChild(styleElement);

@@ -1,10 +1,12 @@
 ﻿using HackBack.Contracts.RabbitMQContracts;
+using System.Text.Json.Serialization;
 
 namespace HackBack.Infrastructure.Models
 {
     internal record StatusLlmServiceResponse : LlmServiceResponseBase
     {
-        internal override ResponseType Type => ResponseType.Status;
-        internal required LlmStatusResponse Body { get; init; }
+        
+        [JsonPropertyName("Body")]
+        public required LlmStatusResponse Body { get; init; }
     }
 }
