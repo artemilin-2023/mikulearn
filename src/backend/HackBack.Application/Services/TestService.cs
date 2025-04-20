@@ -60,7 +60,7 @@ public class TestService(
         if (userId.IsFailure)
             return Error.Failure("Failed to retrieve user information");
 
-        var testGenerationRequest = TestGenerationRequestEntity.CreateNew(userId, uploadedFileName);
+        var testGenerationRequest = TestGenerationRequestEntity.CreateNew(userId, uploadedFileName, requestDto.Description, requestDto.Name, requestDto.TestAccess);
         var llmRequest = new LlmTestGenerationRequest(testGenerationRequest.Id, requestDto.Description, uploadedFileName);
 
         var llmResult = await llmService.SendTestGenerationRequest(llmRequest, cancellationToken);

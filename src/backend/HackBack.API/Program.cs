@@ -2,7 +2,6 @@ using HackBack.API.ServiceRegistration;
 using HackBack.Application.ServiceRegistration;
 using HackBack.Infrastructure.ServiceRegistration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);

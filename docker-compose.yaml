@@ -112,6 +112,30 @@ services:
     volumes:
       - minio-data:/data
 
+  llm-service:
+    build:
+      context: src/llm-service
+      dockerfile: Dockerfile
+    container_name: llm-service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://rmuser:rmpassword@rabbitmq:5672
+      - TASK_QUEUE_NAME=task_queue
+      - RESPONSE_QUEUE_NAME=response_queue
+      - TASK_ROUTING_KEY=llm.tasks
+      - RESPONSE_ROUTING_KEY=llm.response
+      - EXCHANGE_NAME=llm.services
+      - OPENROUTER_API_URL=https://openrouter.ai/api/v1
+      - OPENROUTER_API_KEY=<TOKEN_HERE>
+      - OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=NhxVLpgxyCfXqjVIY793
+      - MINIO_SECRET_KEY=mnzS4hSaMYqR94QmC7ZlJtxIdhUi02Rz2yCUbQfU
+      - MINIO_BUCKET_NAME=huipetrovich
+    restart: on-failure
+
 volumes:
   postgres-data:
   redis-data:
