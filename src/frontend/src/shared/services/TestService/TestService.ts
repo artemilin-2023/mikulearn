@@ -9,6 +9,6 @@ export default class TestService {
         name: string,
         description: string,
     ): Promise<AxiosResponse<null>> {
-        return api.post<null>("/generate", { file, name, description });
+        return api.post<null>("/test/generate", { file, name, description });
     }
 }
