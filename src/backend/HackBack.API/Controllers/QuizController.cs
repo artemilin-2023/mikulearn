@@ -3,6 +3,7 @@ using HackBack.Application.Extensions;
 using HackBack.Contracts.ApiContracts.Quiz;
 using Microsoft.AspNetCore.Mvc;
 using ResultSharp.Core;
+using ResultSharp.HttpResult;
 
 namespace HackBack.API.Controllers
 {
@@ -32,7 +33,7 @@ namespace HackBack.API.Controllers
 
             Result<QuizResponse> response = await _quizService.SendAsync(answer, cancellationToken);
 
-            return Ok(response);
+            return response.ToResponse();
         }
     }
 }

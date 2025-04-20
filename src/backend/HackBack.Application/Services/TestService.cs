@@ -75,7 +75,7 @@ public class TestService(
 
     public async Task<Result<TestEntity>> GetTestAsync(Guid id, CancellationToken cancellationToken)
     {
-        var result = await testRepository.AsQuery().SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
+        var result = await testRepository.AsQuery().Include(x => x.Questions).SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
         if (result is null)
             return Error.NotFound("Test not found");
         return result;
