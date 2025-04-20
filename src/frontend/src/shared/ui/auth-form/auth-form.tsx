@@ -1,5 +1,13 @@
+import {
+  Box,
+  Paper,
+  Title,
+  Text,
+  Stack,
+  Container,
+} from '@mantine/core';
 import { ReactNode } from 'react';
-import { Box, Paper, Title, Text, Stack, Container } from '@mantine/core';
+
 import classes from './auth-form.module.css';
 
 export interface AuthFormProps {

@@ -1,10 +1,10 @@
 import { MantineProvider } from '@mantine/core';
 import { useEffect } from 'react';
-import { StoreContext, store } from "@shared/store/store.js";
-import { RouterProvider } from '@app/providers';
 
-import { theme } from "@app/styles/app-theme";
-import "@app/styles/global.css";
+import { RouterProvider } from '@app/providers';
+import { theme } from '@app/styles/app-theme';
+import { StoreContext, store } from '@shared/store/store.js';
+import '@app/styles/global.css';
 
 export function App() {
   useEffect(() => {

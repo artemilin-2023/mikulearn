@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
-import styles from './header.module.css';
-import { store } from '@shared/store/store';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
+
+import { store } from '@shared/store/store';
 import ThemeSwitcher from '@widgets/ThemeSwitcher/ThemeSwitcher';
+
+import styles from './header.module.css';
 
 export const Header = observer(() => {
   const isAuthenticated = store.isAuth;

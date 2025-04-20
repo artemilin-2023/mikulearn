@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
-import { App } from '@app';
+
+import { App } from './app';
 
 // global styles
 import '@mantine/core/styles.css';
@@ -12,7 +13,7 @@ const root = createRoot(document.getElementById('root')!);
 
 async function render() {
   root.render(
-      <App />
+    <App />,
   );
 }
 
