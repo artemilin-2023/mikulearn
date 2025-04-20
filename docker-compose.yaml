@@ -26,6 +26,7 @@ services:
       - ConnectionStrings__Redis=redis:6379
       - ConnectionStrings__Postgres=Host=postgres;Database=database;Username=postgres;Password=password
       - ConnectionStrings__OpenRouter=Host=https://openrouter.ai/api/v1;Api_key=<OPENROUTER_API_KEY>
+      - ConnectionStrings__MinIO=minio:9000
     depends_on:
       rabbitmq:
         condition: service_healthy
