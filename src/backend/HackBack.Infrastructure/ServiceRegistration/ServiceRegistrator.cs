@@ -1,3 +1,4 @@
+using System.Data.Common;
 using HackBack.Application.Abstractions.Auth;
 using HackBack.Application.Abstractions.Data;
 using HackBack.Application.Abstractions.RabbitMQ;
@@ -153,11 +154,19 @@ public static class ServiceRegistrator
 
     private static IServiceCollection AddMinIo(this IServiceCollection services, IConfiguration configuration)
     {
-        var minioConfiguration = configuration.GetAndSaveConfiguration<MinIoOptions>(services);
+
+        DbConnectionStringBuilder builder = new();
+        builder.ConnectionString = configuration.GetConnectionString("MinIO")
+            ?? throw new InvalidOperationException("MinIo options are not configured");
+
+        services.Configure<MinIoOptions>(options =>
+        {
+            options.BucketName = (string)builder["bucketname"];
+        });
 
         IMinioClient minioClient = new MinioClient()
-            .WithEndpoint(configuration.GetConnectionString("MinIO"))
-            .WithCredentials(minioConfiguration.AccessKey, minioConfiguration.SecretKey)
+            .WithEndpoint((string)builder["host"])
+            .WithCredentials((string)builder["username"], (string)builder["password"])
             .WithSSL(false)
             .Build();
 
