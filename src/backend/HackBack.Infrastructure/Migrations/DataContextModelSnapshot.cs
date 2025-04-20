@@ -302,6 +302,37 @@ namespace HackBack.Infrastructure.Migrations
                     b.ToTable("TestGenerationRequestEntity");
                 });
 
+            modelBuilder.Entity("HackBack.Domain.Entities.TestSessionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasAnnotation("Relational:JsonPropertyName", "Id");
+
+                    b.Property<DateTime>("FinishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TestSessionEntity");
+                });
+
             modelBuilder.Entity("HackBack.Domain.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -368,6 +399,25 @@ namespace HackBack.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HackBack.Domain.Entities.TestSessionEntity", b =>
+                {
+                    b.HasOne("HackBack.Domain.Entities.TestEntity", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HackBack.Domain.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HackBack.Domain.Entities.UserRoleEntity", b =>

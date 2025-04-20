@@ -135,6 +135,17 @@ services:
       - MINIO_SECRET_KEY=mnzS4hSaMYqR94QmC7ZlJtxIdhUi02Rz2yCUbQfU
       - MINIO_BUCKET_NAME=huipetrovich
     restart: on-failure
+  
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@mail.xyz
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - 5050:80
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
 
 volumes:
   postgres-data:
@@ -142,3 +153,4 @@ volumes:
   caddy-data:
   rabbitmq-state:
   minio-data:
+  pgadmin-data:
