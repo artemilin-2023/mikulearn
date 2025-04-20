@@ -59,7 +59,7 @@ export const MultipleChoice: React.FC<MultipleChoiceProps> = ({ question, onAnsw
         disabled={selectedOptions.length === 0}
         className="quiz-button"
       >
-        Отправить
+        Ответить
       </button>
     </div>
   );

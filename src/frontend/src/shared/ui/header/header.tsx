@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styles from './header.module.css';
 import { store } from '@shared/store/store';
 import { observer } from 'mobx-react-lite';
+import ThemeSwitcher from '@widgets/ThemeSwitcher/ThemeSwitcher';
 
 export const Header = observer(() => {
   const isAuthenticated = store.isAuth;
@@ -30,6 +31,15 @@ export const Header = observer(() => {
               </li>
             </ul>
           </nav> */}
+          
+          <div className={styles.themeSwitcher}>
+            <ThemeSwitcher 
+              maskImage="/shigure-ui.webp"
+              switchDuration={1200}
+              switchName="theme-transition"
+            />
+          </div>
+
           <div className={styles.auth}>
             {
               isAuthenticated ? (

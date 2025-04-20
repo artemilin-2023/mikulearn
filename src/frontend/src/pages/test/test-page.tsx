@@ -19,18 +19,18 @@ interface Question {
 const questions: Question[] = [
   {
     id: 1,
-    question: "What is the capital of France?",
+    question: "Какой город является столицей Франции?",
     type: "single",
     options: [
-      { id: 1, option: "Paris", isCorrect: true },
-      { id: 2, option: "London", isCorrect: false },
-      { id: 3, option: "Berlin", isCorrect: false },
-      { id: 4, option: "Madrid", isCorrect: false }
+      { id: 1, option: "Париж", isCorrect: true },
+      { id: 2, option: "Лондон", isCorrect: false },
+      { id: 3, option: "Берлин", isCorrect: false },
+      { id: 4, option: "Мадрид", isCorrect: false }
     ]
   },
   {
     id: 2,
-    question: "Which of these are programming languages?",
+    question: "Какие из перечисленных являются языками программирования?",
     type: "multiple",
     options: [
       { id: 1, option: "JavaScript", isCorrect: true },
@@ -41,24 +41,24 @@ const questions: Question[] = [
   },
   {
     id: 3,
-    question: "Which planet is known as the Red Planet?",
+    question: "Какая планета известна как Красная планета?",
     type: "single",
     options: [
-      { id: 1, option: "Earth", isCorrect: false },
-      { id: 2, option: "Mars", isCorrect: true },
-      { id: 3, option: "Jupiter", isCorrect: false },
-      { id: 4, option: "Venus", isCorrect: false }
+      { id: 1, option: "Земля", isCorrect: false },
+      { id: 2, option: "Марс", isCorrect: true },
+      { id: 3, option: "Юпитер", isCorrect: false },
+      { id: 4, option: "Венера", isCorrect: false }
     ]
   },
   {
     id: 4,
-    question: "Select all continents:",
+    question: "Выберите все континенты из списка:",
     type: "multiple",
     options: [
-      { id: 1, option: "Europe", isCorrect: true },
-      { id: 2, option: "Africa", isCorrect: true },
-      { id: 3, option: "Atlantis", isCorrect: false },
-      { id: 4, option: "Asia", isCorrect: true }
+      { id: 1, option: "Европа", isCorrect: true },
+      { id: 2, option: "Африка", isCorrect: true },
+      { id: 3, option: "Атлантида", isCorrect: false },
+      { id: 4, option: "Азия", isCorrect: true }
     ]
   }
 ];

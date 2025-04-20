@@ -9,7 +9,6 @@ main {
   margin: 0 auto;
   padding: 1rem;
   flex: 1;
-  background-color: var(--color-background);
 }
 
 .page-transition-container {

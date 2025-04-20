@@ -1,14 +1,12 @@
-/* Quiz Component Styles */
-
-/* Container styles */
 .quiz-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--color-text);
 }
 
-/* Header styles */
 .quiz-header {
   display: flex;
   justify-content: space-between;
@@ -19,7 +17,7 @@
 .quiz-title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary-400);
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -27,29 +25,28 @@
   font-size: 1.25rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
-  background-color: var(--primary-50);
+  background-color: var(--color-surface);
   border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
 }
 
 .quiz-timer-normal {
-  color: var(--primary-400);
+  color: var(--color-primary);
 }
 
 .quiz-timer-warning {
-  color: var(--error-400);
+  color: var(--color-danger);
 }
 
-/* Quiz card styles */
 .quiz-card {
-  background-color: white;
+  background-color: var(--color-surface);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px var(--color-shadow);
   padding: 1.5rem;
   margin-bottom: 2rem;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--color-border);
 }
 
-/* Progress styles */
 .quiz-progress-container {
   margin-bottom: 1.5rem;
 }
@@ -58,13 +55,13 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-text-light);
   margin-bottom: 0.5rem;
 }
 
 .quiz-progress-bar-container {
   width: 100%;
-  background-color: #e5e7eb;
+  background-color: var(--color-surface-hover);
   border-radius: 9999px;
   height: 8px;
   overflow: hidden;
@@ -72,17 +69,16 @@
 
 .quiz-progress-bar {
   height: 100%;
-  background-color: var(--primary-400);
+  background-color: var(--color-primary);
   border-radius: 9999px;
   transition: width 0.3s ease;
 }
 
-/* Question styles */
 .question-title {
   font-size: 1.25rem;
   font-weight: 500;
   margin-bottom: 1.25rem;
-  color: var(--primary-400);
+  color: var(--color-text);
 }
 
 .options-container {
@@ -95,13 +91,14 @@
   margin-bottom: 0.75rem;
   padding: 0.75rem;
   border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   transition: all 0.2s ease;
+  background-color: var(--color-surface);
 }
 
 .option-item:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
 }
 
 .option-item input[type="radio"],
@@ -114,7 +111,7 @@
 
 .option-item input[type="radio"]:checked + label,
 .option-item input[type="checkbox"]:checked + label {
-  /* color: var(--primary-700); */
+  color: var(--color-primary);
   font-weight: 500;
 }
 
@@ -122,31 +119,33 @@
   font-size: 1rem;
   cursor: pointer;
   flex: 1;
+  color: var(--color-text);
 }
 
-/* Button styles */
 .quiz-button {
   background: var(--gradient-primary-secondary-light);
-  /* color: white; */
+  color: var(--color-text);
   border: none;
   border-radius: 0.5rem;
-  padding: 0.5rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
 }
-/* 
+
 .quiz-button:hover {
-  background: var(--gradient-secondary-primary-light);
-} */
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
 
 .quiz-button:disabled {
-  background-color: #9ca3af;
+  background-color: var(--color-text-light);
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Results screen styles */
 .results-container {
   text-align: center;
   padding: 2rem;
@@ -155,23 +154,23 @@
 .results-title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary-400);
+  color: var(--color-primary);
   margin-bottom: 1.5rem;
 }
 
 .results-score {
   font-size: 4rem;
   font-weight: 700;
-  color: var(--primary-400);
+  color: var(--color-primary);
   margin-bottom: 1rem;
 }
 
 .results-percentage {
   font-size: 1.5rem;
   margin-bottom: 2rem;
+  color: var(--color-text);
 }
-
-/* Animation for transitions */
+    
 @keyframes fadeIn {
   from {
     opacity: 0;

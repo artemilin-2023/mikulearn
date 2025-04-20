@@ -56,7 +56,7 @@ export const SingleChoice: React.FC<SingleChoiceProps> = ({ question, onAnswer }
         disabled={selectedOption === null}
         className="quiz-button"
       >
-        Отправить
+        Ответить
       </button>
     </div>
   );

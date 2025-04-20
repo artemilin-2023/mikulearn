@@ -12,7 +12,7 @@ const root = createRoot(document.getElementById('root')!);
 
 async function render() {
   root.render(
-    <App />
+      <App />
   );
 }
 
