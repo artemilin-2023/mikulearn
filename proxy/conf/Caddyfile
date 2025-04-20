@@ -13,7 +13,8 @@
 			uri /api/swagger/* strip_prefix /api
 			reverse_proxy backend:8080
 		}
-		handle host s3.{$CADDY_HOST:*} {
+		@s3 host s3.{$CADDY_HOST:*}
+		handle @s3 {
 			uri strip_prefix /s3
 			reverse_proxy minio:9000
 		}
