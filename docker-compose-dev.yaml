@@ -1,4 +1,9 @@
 services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - 15672:15672
+
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -15,10 +20,6 @@ services:
       target: dev
     volumes:
       - ./src/frontend/src:/app/src
-
-  caddy:
-    environment:
-      CADDY_FRONTEND_PORT: 5173
 
 volumes:
   pgadmin-data:

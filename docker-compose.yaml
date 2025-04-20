@@ -25,6 +25,7 @@ services:
       - ConnectionStrings__Rabbit=amqp://rmuser:rmpassword@rabbitmq:5672
       - ConnectionStrings__Redis=redis:6379
       - ConnectionStrings__Postgres=Host=postgres;Database=database;Username=postgres;Password=password
+      - ConnectionStrings__OpenRouter=Host=https://openrouter.ai/api/v1;Api_key=<OPENROUTER_API_KEY>
     depends_on:
       postgres:
         condition: service_healthy
@@ -75,7 +76,7 @@ services:
       dockerfile: Dockerfile
     environment:
       # Uncomment, add the domain, host and CF token. Voila, you have HTTPS
-      #CADDY_EXTRA_DIRECTIVES: import tls
+      #CADDY_EXTRA_DIRECTIVES: import cloudflare_dns
       #CADDY_CERT_DOMAIN: "*.y7o4ka.xyz"
       #CADDY_HOST: ebangelion.y7o4ka.xyz
       CLOUDFLARE_API_TOKEN: <API_TOKEN_HERE>
@@ -88,14 +89,13 @@ services:
 
   rabbitmq:
     hostname: rabbitmq
-    image: rabbitmq:4-management
+    image: rabbitmq:4
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=rmuser
       - RABBITMQ_DEFAULT_PASS=rmpassword
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
     ports:
-      - 15672:15672
       - 5672:5672
     healthcheck:
       test: rabbitmq-diagnostics -q ping
