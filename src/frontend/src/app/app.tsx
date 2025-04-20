@@ -34,7 +34,7 @@ export function App() {
         defaultColorScheme={initialColorScheme || 'light'}
       >
         {/* <SignalrProvider> */}
-          <RouterProvider />
+        <RouterProvider />
         {/* </SignalrProvider> */}
       </MantineProvider>
     </StoreContext.Provider>
