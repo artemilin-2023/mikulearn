@@ -130,7 +130,7 @@ services:
       - EXCHANGE_NAME=llm.services
       - OPENROUTER_API_URL=https://openrouter.ai/api/v1
       - OPENROUTER_API_KEY=<API KEY HERE>
-      - OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+      - OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free
       - MINIO_ENDPOINT=minio:9000
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin
