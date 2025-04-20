@@ -116,7 +116,6 @@ services:
     build:
       context: src/llm-service
       dockerfile: Dockerfile
-    container_name: llm-service
     depends_on:
       rabbitmq:
         condition: service_healthy
