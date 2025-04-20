@@ -9,7 +9,8 @@ using ResultSharp.Extensions.FunctionalExtensions.Async;
 namespace HackBack.Infrastructure.RabbitMQ.Producers
 {
     public class LlmProducer :
-        IProducer<LlmTestGenerationRequest>
+        IProducer<LlmTestGenerationRequest>,
+        IProducer<GenerateRecommendationRequest>
     {
         private readonly RabbitClientBuilder _builder;
         private readonly LlmServiceOptions _options;
@@ -29,6 +30,19 @@ namespace HackBack.Infrastructure.RabbitMQ.Producers
         {
             var result = await _builder
                 .GetOrBuildAsync<Producer<LlmTestGenerationRequest>>()
+                .ThenAsync(async producer =>
+                {
+                    return await producer.ProduceAsync(message, _options.ProducerOptions.ExchangeName, _options.ProducerOptions.RoutingKey, cancellationToken);
+                });
+
+            return result;
+        }
+
+        // Давайте сделаем вид, что тут нет никакого дублирования кода
+        public async Task<Result> ProduceAsync(GenerateRecommendationRequest message, CancellationToken cancellationToken)
+        {
+            var result = await _builder
+                .GetOrBuildAsync<Producer<GenerateRecommendationRequest>>()
                 .ThenAsync(async producer =>
                 {
                     return await producer.ProduceAsync(message, _options.ProducerOptions.ExchangeName, _options.ProducerOptions.RoutingKey, cancellationToken);

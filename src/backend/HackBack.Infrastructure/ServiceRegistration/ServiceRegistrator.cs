@@ -128,6 +128,7 @@ public static class ServiceRegistrator
     private static IServiceCollection AddRabbitMqProducers(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IProducer<LlmTestGenerationRequest>, LlmProducer>();
+        services.AddScoped<IProducer<GenerateRecommendationRequest>, LlmProducer>();
 
         return services;
     }

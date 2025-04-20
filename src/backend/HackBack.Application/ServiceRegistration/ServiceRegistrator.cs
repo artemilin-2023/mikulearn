@@ -26,7 +26,8 @@ namespace HackBack.Application.ServiceRegistration
                 .AddScoped<IFileService, FileService>()
                 .AddScoped<ITestService, TestService>()
                 .AddScoped<ILlmService, LlmService>()
-                .AddScoped<ITestSessionService, TestSessionService>();   
+                .AddScoped<IRecommendationService, RecommendationService>()
+                .AddScoped<ITestSessionService, TestSessionService>();
 
             return services;
         }

@@ -12,9 +12,11 @@ using ResultSharp.Extensions.FunctionalExtensions.Async;
 namespace HackBack.Application.Services;
 
 public class TestSessionService(
-    IRepository<TestSessionEntity, Guid> repository,
+    IRepository<TestSessionEntity, Guid> testSessionRepository,
+    IRepository<TestResultEntity, Guid> testResultRepository,
     ITestService testService,
-    IAccountService accountService) : ITestSessionService
+    IAccountService accountService,
+    IRecommendationService recommendationService) : ITestSessionService
 {
     public async Task<Result<Guid>> Create(Guid testId, HttpRequest httpRequest, CancellationToken cancellationToken)
     {
@@ -22,7 +24,7 @@ public class TestSessionService(
         return await testResult.ThenAsync(async test =>
         {
             var id = Guid.NewGuid();
-            await repository.AddAsync(new TestSessionEntity
+            await testSessionRepository.AddAsync(new TestSessionEntity
             {
                 Id = id,
                 StartedAt = DateTime.Now,
@@ -39,27 +41,56 @@ public class TestSessionService(
         HttpRequest httpRequest,
         CancellationToken cancellationToken)
     {
-        var session = await repository.AsQuery().SingleOrDefaultAsync(cancellationToken);
+        var session = await testSessionRepository
+            .AsQuery(tracking: true)
+            .Include(s => s.Test)
+            .ThenInclude(t => t.Questions)
+            .SingleOrDefaultAsync(cancellationToken);
+        
         if (session is null)
             return Error.NotFound("Test session not found");
+
         int score = 0;
+        var userAnswerEntities = new List<UserAnswerEntity>();
         foreach (var answer in answers)
         {
             var q = session.Test.Questions.FirstOrDefault(q => q.Id == answer.QuestionId);
             if (q is null)
                 return Error.BadRequest("One of the answers not belongs to test session");
+
+            bool isCorrect = false;
             if (Equals(q.CorrectAnswers.Order(), answer.SelectedAnswers.Order()))
+            {
                 score++;
+                isCorrect = true;
+            }
+
+            userAnswerEntities.Add(new UserAnswerEntity()
+            {
+                CreatedAt = DateTime.UtcNow,
+                IsCorrect = isCorrect,
+                Id = Guid.NewGuid(),
+                Question = q,
+                SelectedAnswers = answer.SelectedAnswers,
+                TestSession = session
+            });
         }
+        
+        var testResultId = Guid.NewGuid();
+        // я устал
+        var adfadf = await recommendationService.MakeRecomendationRequestAsync(session.Test, userAnswerEntities, testResultId, cancellationToken);
+        if (adfadf is null)
+            return Error.Failure("Failed to create recommendation request");
 
-        // TODO: start llm analysis
-
-        return new TestResultEntity
+        var testResultEntity = new TestResultEntity
         {
-            Id = Guid.NewGuid(),
+            Id = testResultId,
             Session = session,
             User = await accountService.GetCurrentUserAsync(httpRequest, cancellationToken),
             Score = score
         };
+
+        await testResultRepository.AddAsync(testResultEntity, cancellationToken);
+        return testResultEntity;
     }
 }
