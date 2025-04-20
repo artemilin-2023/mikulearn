@@ -27,6 +27,8 @@ services:
       - ConnectionStrings__Postgres=Host=postgres;Database=database;Username=postgres;Password=password
       - ConnectionStrings__OpenRouter=Host=https://openrouter.ai/api/v1;Api_key=<OPENROUTER_API_KEY>
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       postgres:
         condition: service_healthy
       redis:
@@ -130,8 +132,8 @@ services:
       - OPENROUTER_API_KEY=<TOKEN_HERE>
       - OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
       - MINIO_ENDPOINT=minio:9000
-      - MINIO_ACCESS_KEY=NhxVLpgxyCfXqjVIY793
-      - MINIO_SECRET_KEY=mnzS4hSaMYqR94QmC7ZlJtxIdhUi02Rz2yCUbQfU
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
       - MINIO_BUCKET_NAME=huipetrovich
     restart: on-failure
 

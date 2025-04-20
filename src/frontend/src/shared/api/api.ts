@@ -1,5 +1,6 @@
-import { store } from '@shared/store/store';
 import axios from 'axios';
+
+import { store } from '@shared/store/store';
 
 export const api = axios.create({
   baseURL: `${window.location.origin}/api`,
@@ -33,5 +34,5 @@ api.interceptors.response.use(
       store.clearAuth();
     }
     return Promise.reject(error);
-  }
+  },
 );

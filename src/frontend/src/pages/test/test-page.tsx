@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { SingleChoice } from "@shared/test-questions/SingleChoice";
-import { MultipleChoice } from "@shared/test-questions/MultipleChoice";
-import "@shared/test-questions/styles.css";
+import { useState, useEffect } from 'react';
+
+import { MultipleChoice } from '@shared/test-questions/MultipleChoice';
+import { SingleChoice } from '@shared/test-questions/SingleChoice';
+import '@shared/test-questions/styles.css';
 
 interface Option {
   id: number;
@@ -13,54 +14,54 @@ interface Question {
   id: number;
   question: string;
   options: Option[];
-  type: "single" | "multiple";
+  type: 'single' | 'multiple';
 }
 
 const questions: Question[] = [
   {
     id: 1,
-    question: "Какой город является столицей Франции?",
-    type: "single",
+    question: 'Какой город является столицей Франции?',
+    type: 'single',
     options: [
-      { id: 1, option: "Париж", isCorrect: true },
-      { id: 2, option: "Лондон", isCorrect: false },
-      { id: 3, option: "Берлин", isCorrect: false },
-      { id: 4, option: "Мадрид", isCorrect: false }
-    ]
+      { id: 1, option: 'Париж', isCorrect: true },
+      { id: 2, option: 'Лондон', isCorrect: false },
+      { id: 3, option: 'Берлин', isCorrect: false },
+      { id: 4, option: 'Мадрид', isCorrect: false },
+    ],
   },
   {
     id: 2,
-    question: "Какие из перечисленных являются языками программирования?",
-    type: "multiple",
+    question: 'Какие из перечисленных являются языками программирования?',
+    type: 'multiple',
     options: [
-      { id: 1, option: "JavaScript", isCorrect: true },
-      { id: 2, option: "HTML", isCorrect: false },
-      { id: 3, option: "Python", isCorrect: true },
-      { id: 4, option: "CSS", isCorrect: false }
-    ]
+      { id: 1, option: 'JavaScript', isCorrect: true },
+      { id: 2, option: 'HTML', isCorrect: false },
+      { id: 3, option: 'Python', isCorrect: true },
+      { id: 4, option: 'CSS', isCorrect: false },
+    ],
   },
   {
     id: 3,
-    question: "Какая планета известна как Красная планета?",
-    type: "single",
+    question: 'Какая планета известна как Красная планета?',
+    type: 'single',
     options: [
-      { id: 1, option: "Земля", isCorrect: false },
-      { id: 2, option: "Марс", isCorrect: true },
-      { id: 3, option: "Юпитер", isCorrect: false },
-      { id: 4, option: "Венера", isCorrect: false }
-    ]
+      { id: 1, option: 'Земля', isCorrect: false },
+      { id: 2, option: 'Марс', isCorrect: true },
+      { id: 3, option: 'Юпитер', isCorrect: false },
+      { id: 4, option: 'Венера', isCorrect: false },
+    ],
   },
   {
     id: 4,
-    question: "Выберите все континенты из списка:",
-    type: "multiple",
+    question: 'Выберите все континенты из списка:',
+    type: 'multiple',
     options: [
-      { id: 1, option: "Европа", isCorrect: true },
-      { id: 2, option: "Африка", isCorrect: true },
-      { id: 3, option: "Атлантида", isCorrect: false },
-      { id: 4, option: "Азия", isCorrect: true }
-    ]
-  }
+      { id: 1, option: 'Европа', isCorrect: true },
+      { id: 2, option: 'Африка', isCorrect: true },
+      { id: 3, option: 'Атлантида', isCorrect: false },
+      { id: 4, option: 'Азия', isCorrect: true },
+    ],
+  },
 ];
 
 export const TestPage: React.FC = () => {
@@ -99,22 +100,22 @@ export const TestPage: React.FC = () => {
 
 
     const question = questions[currentQuestionIndex];
-    
-    if (question.type === "single") {
+
+    if (question.type === 'single') {
       const selectedOptionId = selectedOption as number;
       const option = question.options.find(opt => opt.id === selectedOptionId);
-      
+
       if (option && option.isCorrect) {
         setScore(prevScore => prevScore + 1);
       }
-    } else if (question.type === "multiple") {
+    } else if (question.type === 'multiple') {
       const selectedOptions = selectedOption as number[];
       const correctOptions = question.options.filter(opt => opt.isCorrect).map(opt => opt.id);
       const incorrectSelections = question.options.filter(opt => !opt.isCorrect).map(opt => opt.id);
-      
+
       const allCorrectSelected = correctOptions.every(id => selectedOptions.includes(id));
       const noIncorrectSelected = !selectedOptions.some(id => incorrectSelections.includes(id));
-      
+
       if (allCorrectSelected && noIncorrectSelected) {
         setScore(prevScore => prevScore + 1);
       }
@@ -153,7 +154,7 @@ export const TestPage: React.FC = () => {
               </span>
             </div>
           </div>
-          
+
           <div className="quiz-card">
             <div className="quiz-progress-container">
               <div className="quiz-progress-text">
@@ -164,16 +165,16 @@ export const TestPage: React.FC = () => {
                 <div className="quiz-progress-bar" style={{ width: `${progress}%` }}></div>
               </div>
             </div>
-            
-            {currentQuestion.type === "single" ? (
+
+            {currentQuestion.type === 'single' ? (
               <SingleChoice
                 question={currentQuestion}
-                onAnswer={(option) => handleAnswer(option)}
+                onAnswer={(option: number) => handleAnswer(option)}
               />
             ) : (
               <MultipleChoice
                 question={currentQuestion}
-                onAnswer={(options) => handleAnswer(options)}
+                onAnswer={(options: number[]) => handleAnswer(options)}
               />
             )}
           </div>

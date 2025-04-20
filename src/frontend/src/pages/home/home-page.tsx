@@ -1,80 +1,82 @@
-import {
-	FaLaptopCode,
-	FaArrowRight,
-	FaUsers,
-	FaBook,
-	FaLightbulb,
-} from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import styles from './home-page.module.css';
+import {
+  FaLaptopCode,
+  FaArrowRight,
+  FaUsers,
+  FaBook,
+  FaLightbulb,
+} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
+import styles from './home-page.module.css';
+
+
 export const HomePage = () => {
-	const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 	
-	useEffect(() => {
-		const handleScroll = () => {
-			setScrolled(window.scrollY > 50);
-		};
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
 
-		window.addEventListener('scroll', handleScroll);
-		return () => window.removeEventListener('scroll', handleScroll);
-	}, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-	return (
-		<div className={styles.indexPage}>
-			<section className={`${styles.hero} ${scrolled ? styles.scrolled : ''}`}>
-				<div className={styles.heroContent}>
-					<div className={styles.titleWrapper}>
-						<h1 className={styles.title}>
+  return (
+    <div className={styles.indexPage}>
+      <section className={`${styles.hero} ${scrolled ? styles.scrolled : ''}`}>
+        <div className={styles.heroContent}>
+          <div className={styles.titleWrapper}>
+            <h1 className={styles.title}>
 							Учитесь <span className={styles.highlight}>эффективно</span>
-						</h1>
-						<h1 className={styles.title}>
+            </h1>
+            <h1 className={styles.title}>
 							Развивайтесь <span className={styles.highlight}>быстро</span>
-						</h1>
-					</div>
-					<p className={styles.subtitle}>
+            </h1>
+          </div>
+          <p className={styles.subtitle}>
 						Современная платформа для онлайн-обучения с персонализированным
 						подходом
-					</p>
-					<div className={styles.cta}>
-						<Link to="/sign-up" className={styles.primaryButton}>
+          </p>
+          <div className={styles.cta}>
+            <Link to="/sign-up" className={styles.primaryButton}>
 							Начать обучение <FaArrowRight className={styles.buttonIcon} />
-						</Link>
-					</div>
-				</div>
-				<div className={styles.heroVisual}>
-					<div className={styles.gridContainer}>
-						<div className={`${styles.gridItem} ${styles.gridItem3}`}>
-							<div className={styles.iconWrapper}>
-								<FaLaptopCode />
-							</div>
-							<h3>Интерактивное обучение</h3>
-						</div>
-						<div className={`${styles.gridItem} ${styles.gridItem4}`}>
-							<div className={styles.iconWrapper}>
-								<FaUsers />
-							</div>
-							<h3>Сообщество</h3>
-						</div>
-						<div className={`${styles.gridItem} ${styles.gridItem5}`}>
-							<div className={styles.iconWrapper}>
-								<FaBook />
-							</div>
-							<h3>Отслеживание прогресса</h3>
-						</div>
-						<div className={`${styles.gridItem} ${styles.gridItem6}`}>
-							<div className={styles.iconWrapper}>
-								<FaLightbulb />
-							</div>
-							<h3>Инновационные методики</h3>
-						</div>
-					</div>
-				</div>
-			</section>
+            </Link>
+          </div>
+        </div>
+        <div className={styles.heroVisual}>
+          <div className={styles.gridContainer}>
+            <div className={`${styles.gridItem} ${styles.gridItem3}`}>
+              <div className={styles.iconWrapper}>
+                <FaLaptopCode />
+              </div>
+              <h3>Интерактивное обучение</h3>
+            </div>
+            <div className={`${styles.gridItem} ${styles.gridItem4}`}>
+              <div className={styles.iconWrapper}>
+                <FaUsers />
+              </div>
+              <h3>Сообщество</h3>
+            </div>
+            <div className={`${styles.gridItem} ${styles.gridItem5}`}>
+              <div className={styles.iconWrapper}>
+                <FaBook />
+              </div>
+              <h3>Отслеживание прогресса</h3>
+            </div>
+            <div className={`${styles.gridItem} ${styles.gridItem6}`}>
+              <div className={styles.iconWrapper}>
+                <FaLightbulb />
+              </div>
+              <h3>Инновационные методики</h3>
+            </div>
+          </div>
+        </div>
+      </section>
 
-			{/* я хз нужно ли */}
-			{/* <section className={`${styles.stats} animate-on-scroll`}>
+      {/* я хз нужно ли */}
+      {/* <section className={`${styles.stats} animate-on-scroll`}>
                 <div className={styles.statItem}>
                     <span className={styles.statNumber}>100+</span>
                     <span className={styles.statLabel}>Курсов</span>
@@ -89,7 +91,7 @@ export const HomePage = () => {
                 </div>
             </section> */}
 
-			{/* <section className={`${styles.featuredCourses} animate-on-scroll`}>
+      {/* <section className={`${styles.featuredCourses} animate-on-scroll`}>
 				<h2 className={styles.sectionTitle}>Популярные курсы</h2>
 				<div className={styles.courseGrid}>
 					<div className={`${styles.courseCard} animate-on-scroll`}>
@@ -142,6 +144,6 @@ export const HomePage = () => {
 					</div>
 				</div>
 			</section> */}
-		</div>
-	);
+    </div>
+  );
 };

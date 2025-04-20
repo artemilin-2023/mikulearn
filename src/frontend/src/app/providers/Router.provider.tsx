@@ -1,17 +1,26 @@
-import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
-import { MainLayout } from '@shared/layouts';
+import { Loader } from '@mantine/core';
+import {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
+
 import { HomePage } from '@pages/home/home-page';
+import { NotFoundPage } from '@pages/not-found/not-found-page';
+import { PersonalCabinetPage } from '@pages/personal-cabinet/personal-cabinet-page';
 import { SignInPage } from '@pages/sign-in/sign-in-page';
 import { SignUpPage } from '@pages/sign-up/sign-up-page';
-import { PersonalCabinetPage } from '@pages/personal-cabinet/personal-cabinet-page';
-import { NotFoundPage } from '@pages/not-found/not-found-page';
-import { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '@shared/store/store';
-import { Loader } from '@mantine/core';
-import AuthService from '@shared/services/AuthService/AuthService';
-
-import { User } from '@shared/services/AuthService/AuthService';
 import { TestPage } from '@pages/test/test-page';
+import { MainLayout } from '@shared/layouts';
+import AuthService, { User } from '@shared/services/AuthService/AuthService';
+import { StoreContext } from '@shared/store/store';
 
 
 const Layout = () => {
@@ -44,7 +53,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
               id: responseData.id,
               email: responseData.email,
               name: responseData.name || '',
-              roles: responseData.roles
+              roles: responseData.roles,
             };
             store.setUser(userData);
             store.setIsAuth(true);
@@ -77,7 +86,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', 
+      }}>
         <Loader size="xl" color="primary" />
       </div>
     );
@@ -111,7 +122,9 @@ const GuestOnlyRoute = ({ children }: { children: React.ReactNode }) => {
   
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', 
+      }}>
         <Loader size="xl" color="primary" />
       </div>
     );

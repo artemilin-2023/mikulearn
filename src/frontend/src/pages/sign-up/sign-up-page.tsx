@@ -1,18 +1,28 @@
-import { TextInput, Button, PasswordInput, Group, Anchor, Text, SegmentedControl } from '@mantine/core';
-import { AuthForm } from '@shared/ui/auth-form';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  TextInput,
+  Button,
+  PasswordInput,
+  Group,
+  Anchor,
+  Text,
+  SegmentedControl,
+} from '@mantine/core';
+import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+
 import { api } from '@shared/api/api';
 import { store } from '@shared/store/store';
-import { z } from 'zod';
-import { useState } from 'react';
+import { AuthForm } from '@shared/ui/auth-form';
+
 
 const signUpSchema = z.object({
   email: z.string().email({ message: 'Введите корректный email' }),
   username: z.string().min(2, { message: 'Имя должно содержать минимум 2 символа' }),
   password: z.string().min(6, { message: 'Пароль должен содержать минимум 6 символов' }),
-  role: z.number().min(1, { message: 'Выберите роль' })
+  role: z.number().min(1, { message: 'Выберите роль' }),
 });
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
@@ -20,14 +30,16 @@ type SignUpFormData = z.infer<typeof signUpSchema>;
 export const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { control, handleSubmit, formState: { errors }, setError } = useForm<SignUpFormData>({
+  const {
+    control, handleSubmit, formState: { errors }, setError, 
+  } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: '',
       username: '',
       password: '',
-      role: 2
-    }
+      role: 2,
+    },
   });
 
   const onSubmit = async (data: SignUpFormData) => {
@@ -72,11 +84,11 @@ export const SignUpPage = () => {
         
         if (errorObj.response?.status === 400) {
           setError('email', { 
-            message: 'Пользователь с таким email уже существует' 
+            message: 'Пользователь с таким email уже существует', 
           });
         } else {
           setError('email', { 
-            message: 'Произошла ошибка при регистрации' 
+            message: 'Произошла ошибка при регистрации', 
           });
         }
       }
@@ -151,7 +163,7 @@ export const SignUpPage = () => {
           <SegmentedControl
             data={[
               { value: '2', label: 'Я студент' },
-              { value: '3', label: 'Я преподаватель' }
+              { value: '3', label: 'Я преподаватель' },
             ]}
             value={field.value.toString()}
             onChange={(value) => field.onChange(parseInt(value))}
@@ -167,8 +179,8 @@ export const SignUpPage = () => {
         loading={loading}
         styles={{ 
           label: { 
-            color: 'black' 
-          } 
+            color: 'black', 
+          }, 
         }}
       >
         Зарегистрироваться

@@ -34,6 +34,7 @@ public static class ServiceRegistrator
             .AddRedisCache(configuration)
             .AddAuth()
             .AddRepositories()
+            .AddLlm(configuration) 
             .AddRabbitMqAsync(configuration))
             .AddMinIo(configuration)
             .AddHostedServices();
@@ -49,6 +50,15 @@ public static class ServiceRegistrator
         configuration.GetAndSaveConfiguration<LlmServiceOptions>(services);
 
         return services;
+    }
+
+    private static IServiceCollection AddLlm(this IServiceCollection service, IConfiguration configuration)
+    {
+        service.AddMediatR(cfg =>
+            cfg.RegisterServicesFromAssembly(typeof(LlmServiceMessageHandler).Assembly));
+
+        return service;
+
     }
 
     private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)

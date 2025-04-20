@@ -1,4 +1,8 @@
-import { useState, useEffect, ReactNode } from 'react';
+import {
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 import './ThemeSwitcher.css';
 
 interface ThemeSwitcherProps {
@@ -12,9 +16,9 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
   maskImage = '/shigure-ui.webp',
   switchDuration = 1000,
   switchName = 'theme-transition',
-  children
+  children,
 }) => {
-    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(() => {
+  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(() => {
 
     const savedTheme = localStorage.getItem('mantine-color-scheme');
     const htmlTheme = document.documentElement.getAttribute('data-mantine-color-scheme');
@@ -57,7 +61,7 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
       <button 
         onClick={toggleTheme}
         className="theme-switch-button"
-        aria-label={isDarkTheme ? "Переключить на светлую тему" : "Переключить на темную тему"}
+        aria-label={isDarkTheme ? 'Переключить на светлую тему' : 'Переключить на темную тему'}
       >
         <div className="theme-switch-icon-container">
           <svg 

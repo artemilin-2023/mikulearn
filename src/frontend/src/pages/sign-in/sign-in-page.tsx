@@ -1,16 +1,25 @@
-import { TextInput, Button, PasswordInput, Group, Anchor, Text } from '@mantine/core';
-import { AuthForm } from '@shared/ui/auth-form';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  TextInput,
+  Button,
+  PasswordInput,
+  Group,
+  Anchor,
+  Text,
+} from '@mantine/core';
+import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+
 import { api } from '@shared/api/api';
 import { store } from '@shared/store/store';
-import { useState } from 'react';
+import { AuthForm } from '@shared/ui/auth-form';
+
 
 const signInSchema = z.object({
   email: z.string().email({ message: 'Введите корректный email' }),
-  password: z.string().min(1, { message: 'Введите пароль' })
+  password: z.string().min(1, { message: 'Введите пароль' }),
 });
 
 type SignInFormData = z.infer<typeof signInSchema>;
@@ -18,12 +27,14 @@ type SignInFormData = z.infer<typeof signInSchema>;
 export const SignInPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { control, handleSubmit, formState: { errors }, setError } = useForm<SignInFormData>({
+  const {
+    control, handleSubmit, formState: { errors }, setError, 
+  } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: '',
-      password: ''
-    }
+      password: '',
+    },
   });
 
   const onSubmit = async (data: SignInFormData) => {
@@ -32,7 +43,7 @@ export const SignInPage = () => {
       
       const response = await api.post('/account/login', { 
         email: data.email, 
-        password: data.password 
+        password: data.password, 
       });
       
       if (response.status === 200) {
@@ -70,11 +81,11 @@ export const SignInPage = () => {
         const errorObj = error as { response?: { status?: number } };
         if (errorObj.response?.status === 400 || errorObj.response?.status === 401) {
           setError('password', { 
-            message: 'Неверный email или пароль' 
+            message: 'Неверный email или пароль', 
           });
         } else {
           setError('email', { 
-            message: 'Произошла ошибка при входе' 
+            message: 'Произошла ошибка при входе', 
           });
         }
       }
@@ -136,8 +147,8 @@ export const SignInPage = () => {
         loading={loading}
         styles={{ 
           label: { 
-            color: 'black' 
-          } 
+            color: 'black', 
+          }, 
         }}
       >
         Войти
