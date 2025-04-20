@@ -21,7 +21,7 @@ export const Sidebar = () => {
 
   const setupConnection = () => {
 
-  }
+  };
 
   return (
     <Paper shadow="sm" radius="md" p="lg" withBorder className={styles.sidebar}>

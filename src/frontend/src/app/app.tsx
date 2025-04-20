@@ -2,9 +2,9 @@ import { MantineProvider } from '@mantine/core';
 import { useEffect } from 'react';
 
 import { RouterProvider } from '@app/providers';
+// import { SignalrProvider } from '@app/providers/Signalr.provider';
 import { theme } from '@app/styles/app-theme';
 import { StoreContext, store } from '@shared/store/store.js';
-import { SignalrProvider } from '@app/providers/Signalr.provider';
 import '@app/styles/global.css';
 
 export function App() {
@@ -33,9 +33,9 @@ export function App() {
         theme={theme} 
         defaultColorScheme={initialColorScheme || 'light'}
       >
-        <SignalrProvider>
+        {/* <SignalrProvider> */}
           <RouterProvider />
-        </SignalrProvider>
+        {/* </SignalrProvider> */}
       </MantineProvider>
     </StoreContext.Provider>
   );
