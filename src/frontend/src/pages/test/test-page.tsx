@@ -84,7 +84,7 @@ export const TestPage: React.FC = () => {
     } else if (timeLeft === 0 && !isTestComplete) {
       finishTest();
     }
-  }, [timeLeft, isTimerRunning]);
+  }, [timeLeft, isTimerRunning, isTestComplete]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
