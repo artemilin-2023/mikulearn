@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     watch: {
-      usePolling: true
+      // usePolling: true
     }
   }
 });

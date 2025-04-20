@@ -1,15 +1,9 @@
-import axios from 'axios';
 import { store } from '@shared/store/store';
+import axios from 'axios';
 
 export const api = axios.create({
   baseURL: `${window.location.origin}/api`,
 });
-
-// Initialize token from localStorage on startup
-const token = localStorage.getItem('token');
-if (token) {
-  store.setToken(token);
-}
 
 api.interceptors.request.use((config) => {
   const token = store.token || localStorage.getItem('token');

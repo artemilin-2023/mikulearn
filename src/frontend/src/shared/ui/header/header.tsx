@@ -15,7 +15,9 @@ export const Header = observer(() => {
               MikuLearn
             </Link>
           </div>
-          <nav className={styles.navigation}>
+
+          {/* это я буду делать только за деньги */}
+          {/* <nav className={styles.navigation}>
             <ul>
               <li>
                 <Link to="/">Главная</Link>
@@ -27,7 +29,7 @@ export const Header = observer(() => {
                 <Link to="/404">Топ учеников</Link>
               </li>
             </ul>
-          </nav>
+          </nav> */}
           <div className={styles.auth}>
             {
               isAuthenticated ? (

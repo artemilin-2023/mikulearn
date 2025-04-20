@@ -12,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@mantine/core": "^7.17.4",
+    "@mantine/dropzone": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
     "@types/node": "^22.13.10",
     "@withease/factories": "^1.0.5",

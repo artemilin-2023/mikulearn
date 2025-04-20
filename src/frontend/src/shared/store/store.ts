@@ -1,19 +1,17 @@
 import { makeAutoObservable } from "mobx";
 import { createContext, useContext } from "react";
 import { api } from "@shared/api/api";
+import { User } from "@shared/services/AuthService/AuthService";
 
-type User = {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-};
 
 class Store {
     user: User | null = null;
     isAuth: boolean = false;
     token: string | null = null;
     initialized: boolean = false;
+    
+    // need for (uploading file -> generate test)
+    file: File | null = null;
     
     constructor() {
         makeAutoObservable(this);
@@ -69,6 +67,15 @@ class Store {
         this.isAuth = false;
         this.token = null;
         localStorage.removeItem('token');
+    }
+
+
+    setFile(file: File) {
+        this.file = file;
+    }
+
+    clearFile() {
+        this.file = null;
     }
 }
 

@@ -51,7 +51,7 @@ export const SignInPage = () => {
               id: userResponse.data.id,
               email: userResponse.data.email,
               name: userResponse.data.name || '',
-              role: userResponse.data.role || '',
+              roles: userResponse.data.roles || [],
             });
             store.setIsAuth(true);
             
