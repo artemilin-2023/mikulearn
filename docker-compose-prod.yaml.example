@@ -9,3 +9,8 @@ services:
       CADDY_CERT_DOMAIN: "*.y7o4ka.xyz"
       CADDY_HOST: ebangelion.y7o4ka.xyz
       CLOUDFLARE_API_TOKEN: needed if using wildcard certificate
+
+  llm-service:
+    environment:
+      - OPENROUTER_API_KEY=<API KEY HERE>
+      - OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
