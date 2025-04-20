@@ -142,4 +142,3 @@ volumes:
   caddy-data:
   rabbitmq-state:
   minio-data:
-  pgadmin-data:
