@@ -129,8 +129,8 @@ services:
       - RESPONSE_ROUTING_KEY=llm.response
       - EXCHANGE_NAME=llm.services
       - OPENROUTER_API_URL=https://openrouter.ai/api/v1
-      - OPENROUTER_API_KEY=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
-      - OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+      - OPENROUTER_API_KEY=<API KEY HERE>
+      - OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free
       - MINIO_ENDPOINT=minio:9000
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin

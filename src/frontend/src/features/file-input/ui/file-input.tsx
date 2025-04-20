@@ -89,9 +89,8 @@ export const FileInput = observer(() => {
             onReject={handleReject}
             maxSize={10 * 1024 * 1024}
             accept={{
-              'application/pdf': [],
-              'application/msword': [],
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [],
+              'application/pdf': ['.pdf'],
+              'text/plain': ['.txt'],
             }}
             loading={loading}
             className={styles.dropzone}
