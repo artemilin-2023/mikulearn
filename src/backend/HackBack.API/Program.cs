@@ -30,11 +30,8 @@ if (pendingMigrations.Any())
 
 app.UseResultSharpLogging();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 //app.UseHttpsRedirection();
