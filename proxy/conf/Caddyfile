@@ -16,5 +16,9 @@
     handle {
       reverse_proxy frontend:3000
     }
+    handle /s3/* {
+      uri strip_prefix /s3
+      reverse_proxy minio:9000
+    }
   }
 }
