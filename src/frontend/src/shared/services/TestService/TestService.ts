@@ -9,13 +9,13 @@ export default class TestService {
     file: File,
     name: string,
     description: string,
-  ): Promise<AxiosResponse<null>> {
+  ): Promise<AxiosResponse<string>> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('name', name);
     formData.append('description', description);
         
-    return api.post<null>('/test/generate', formData, {
+    return api.post<string>('/test/generate', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

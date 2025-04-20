@@ -61,12 +61,11 @@ export const PersonalCabinetPage = observer(() => {
 
     try {
       setIsSubmitting(true);
-      await TestService.createTest(fileInputStore.file, data.name, data.description);
+      const response = await TestService.createTest(fileInputStore.file, data.name, data.description);
+      store.setTestGuid(response.data);
       reset();
-      // You can add notification or feedback here
     } catch (error) {
       console.error('Failed to create test:', error);
-      // You can add error notification here
     } finally {
       setIsSubmitting(false);
     }
