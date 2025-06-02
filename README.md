@@ -1,6 +1,6 @@
 # MikuLearn
 
-\<DESCRIPTION: FILL ME>
+hackathon project
 
 ## Installation and launch
 
